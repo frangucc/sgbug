@@ -424,11 +424,11 @@
                                     </p>
                                     <div class="text-sm text-gray-500 mt-1 space-x-2">
                                         <a href="${getGitHubUrl(commit.repository, 'blob', commit.hash, filePath)}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                                            View on GitHub
+                                            Current File
                                         </a>
                                         <span class="text-gray-400">|</span>
                                         <a href="${getGitHubUrl(commit.repository, 'history', commit.hash, filePath)}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                                            History
+                                            File History
                                         </a>
                                     </div>
                                     ${fileChange?.change_summary ? `
@@ -470,6 +470,7 @@
                                     <a href="${getGitHubUrl(commit.repository, 'commit', commit.hash)}" target="_blank" class="text-sm font-mono text-blue-600 hover:text-blue-800">
                                         ${commit.hash.substring(0, 7)}
                                     </a>
+                                    <span class="text-xs text-gray-500">(DIFF)</span>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3">
@@ -482,7 +483,10 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <h3 class="text-sm font-medium text-gray-900 cursor-pointer" onclick="toggleCommitDetails('${commit.hash}')">${commit.title || commit.message}</h3>
+                            <h3 class="text-sm font-medium text-blue-600 cursor-pointer flex items-center gap-1 hover:text-blue-800" onclick="toggleCommitDetails('${commit.hash}')">
+                                <span>${commit.title || commit.message}</span>
+                                <span class="transform transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}" style="display: inline-block">&rarr;</span>
+                            </h3>
                             <p class="text-sm text-gray-500 mt-1">${commit.author}</p>
                             ${commit.detailed_description ? `<p class="mt-2 text-sm text-gray-600">${commit.detailed_description}</p>` : ''}
                         </div>
