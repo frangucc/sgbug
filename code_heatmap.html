@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Change Heatmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            pointer-events: none;
+            font-size: 14px;
+            max-width: 500px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .cell-hover {
+            stroke: #000;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold text-gray-900">Code Change Patterns</h1>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="commits_report.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Commits Report
+                            </a>
+                            <a href="code_heatmap.html" class="border-indigo-500 text-indigo-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Change Patterns
+                            </a>
+                            <a href="dependency_tree.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Dependencies
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Controls -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <select id="repository-filter" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="">All Repositories</option>
+                        </select>
+                        <select id="time-range" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="all" selected>All time</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm text-gray-600">Group by:</label>
+                        <select id="grouping" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="directory">Directory</option>
+                            <option value="file">Individual Files</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <div id="heatmap"></div>
+            </div>
+
+            <!-- Details Panel -->
+            <div id="details-panel" class="mt-6 bg-white shadow rounded-lg p-6 hidden">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Change Details</h3>
+                <div id="details-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data structure to hold our visualization data
+        let heatmapData = {
+            developers: new Set(),
+            files: new Set(),
+            changes: [], // Will hold all changes
+            matrix: [] // Will hold the processed data for the heatmap
+        };
+
+        // Function to load and process data
+        function getGitHubUrl(repo, type, hash, path) {
+            if (!repo) return '#';
+            
+            // Clean up repository name and handle special cases
+            repo = repo.trim();
+            if (repo.startsWith('ChangeCommerce.')) {
+                repo = repo.replace('ChangeCommerce.', '');
+            }
+            
+            // All repositories are under NicheInteractiveMedia organization
+            // For debugging
+            console.log('Creating GitHub URL for:', { repo, type, hash, path });
+            
+            // Clean up repository name
+            if (repo.includes('ChangeCommerce.')) {
+                repo = repo.split('ChangeCommerce.')[1];
+            }
+            
+            const baseUrl = `https://github.com/NicheInteractiveMedia/${repo}`;
+            
+            switch(type) {
+                case 'commit':
+                    return `${baseUrl}/commit/${hash}`;
+                case 'blob':
+                    return `${baseUrl}/blob/${hash}/${path}`;
+                case 'history':
+                    return `${baseUrl}/commits/${hash}/${path}`;
+                default:
+                    return '#';
+            }
+        }
+
+        async function loadData() {
+            const response = await fetch('commits_data.json');
+            const data = await response.json();
+            
+            // Process commits to build our heatmap data
+            console.log('Raw commits data:', data.commits[0]); // Debug first commit
+            
+            // Extract repository names from the summary
+            const repoNames = new Map(data.repoSummary.map(repo => [
+                repo.name.toLowerCase(),
+                repo.name
+            ]));
+
+            data.commits.forEach(commit => {
+                const developer = commit.author;
+                heatmapData.developers.add(developer);
+                
+                // Find the matching repository from summary
+                const repoName = Array.from(repoNames.values()).find(name => 
+                    commit.repository.toLowerCase().includes(name.toLowerCase())
+                ) || commit.repository;
+                
+                commit.file_changes.forEach(change => {
+                    const file = change.file_path;
+                    heatmapData.files.add(file);
+                    
+                    const changeData = {
+                        developer,
+                        file,
+                        date: new Date(commit.date),
+                        tags: change.tags,
+                        impactAreas: change.impact_areas,
+                        changeSummary: change.change_summary,
+                        commitHash: commit.hash,
+                        repository: repoName
+                    };
+                    
+                    console.log('Processed change:', changeData); // Debug processed data
+                    heatmapData.changes.push(changeData);
+                });
+            });
+            
+            processDataForHeatmap();
+            renderHeatmap();
+        }
+
+        // Process data into a matrix format for the heatmap
+        function processDataForHeatmap() {
+            const developers = Array.from(heatmapData.developers);
+            const files = Array.from(heatmapData.files);
+            
+            heatmapData.matrix = developers.map(dev => {
+                return files.map(file => {
+                    const changes = heatmapData.changes.filter(
+                        c => c.developer === dev && c.file === file
+                    );
+                    return {
+                        developer: dev,
+                        file: file,
+                        repository: changes.length > 0 ? changes[0].repository : null,
+                        count: changes.length,
+                        changes: changes
+                    };
+                });
+            });
+        }
+
+        // Render the heatmap visualization
+        function renderHeatmap() {
+            const margin = { top: 50, right: 50, bottom: 100, left: 200 };
+            const width = 1200 - margin.left - margin.right;
+            const height = 800 - margin.top - margin.bottom;
+
+            // Clear previous visualization
+            d3.select("#heatmap").html("");
+            
+            const svg = d3.select("#heatmap")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Create scales
+            const x = d3.scaleBand()
+                .range([0, width])
+                .domain(Array.from(heatmapData.files))
+                .padding(0.01);
+
+            const y = d3.scaleBand()
+                .range([0, height])
+                .domain(Array.from(heatmapData.developers))
+                .padding(0.01);
+
+            const color = d3.scaleSequential()
+                .interpolator(d3.interpolateYlOrRd)
+                .domain([0, d3.max(heatmapData.matrix.flat(), d => d.count)]);
+
+            // Create tooltip
+            const tooltip = d3.select("body")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            // Add the squares
+            svg.selectAll()
+                .data(heatmapData.matrix.flat())
+                .enter()
+                .append("rect")
+                .attr("x", d => x(d.file))
+                .attr("y", d => y(d.developer))
+                .attr("width", x.bandwidth())
+                .attr("height", y.bandwidth())
+                .style("fill", d => d.count > 0 ? color(d.count) : "#eee")
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                        .classed("cell-hover", true);
+                    
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                        
+                    tooltip.html(`
+                        <div class="font-medium">${d.file}</div>
+                        <div class="text-sm text-gray-600">Developer: ${d.developer}</div>
+                        <div class="text-sm text-gray-600">Changes: ${d.count}</div>
+                        ${d.changes.length > 0 ? `
+                            <div class="mt-2">
+                                <div class="font-medium">Recent Changes:</div>
+                                <ul class="text-sm">
+                                    ${d.changes.map(c => `
+                                        <li>• ${new Date(c.date).toLocaleDateString()}: 
+                                            <a href="${getGitHubUrl(c.repository.replace('ChangeCommerce.', ''), 'commit', c.commitHash)}" target="_blank" class="text-blue-600 hover:underline">
+                                                ${c.changeSummary}
+                                            </a>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    `)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .classed("cell-hover", false);
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .on("click", (event, d) => showDetails(d));
+
+            // Add the x-axis labels with links
+            const xAxis = svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            xAxis.selectAll(".tick text").remove(); // Remove default labels
+            
+            xAxis.selectAll(".tick")
+                .append("a")
+                .attr("xlink:href", d => {
+                    const lastChange = heatmapData.changes.find(c => c.file === d);
+                    if (!lastChange || !lastChange.repository) return '#';
+                    return getGitHubUrl(lastChange.repository.replace('ChangeCommerce.', ''), 'commit', lastChange.commitHash);
+                })
+                .append("text")
+                .attr("transform", "rotate(-45)")
+                .attr("y", 10)
+                .attr("x", -10)
+                .style("text-anchor", "end")
+                .style("fill", "#2563eb")
+                .style("text-decoration", "underline")
+                .style("cursor", "pointer")
+                .text(d => d.split('/').pop()); // Show only filename instead of full path
+
+            // Add the y-axis labels
+            svg.append("g")
+                .call(d3.axisLeft(y));
+        }
+
+        // Show detailed information when a cell is clicked
+        function showDetails(data) {
+            const detailsPanel = document.getElementById('details-panel');
+            const detailsContent = document.getElementById('details-content');
+            
+            if (data.count === 0) {
+                detailsPanel.classList.add('hidden');
+                return;
+            }
+
+            detailsPanel.classList.remove('hidden');
+            
+            // Sort changes by date, most recent first
+            const sortedChanges = [...data.changes].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            detailsContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="text-lg font-medium">${data.file}</h4>
+                            <p class="text-sm text-gray-600">Developer: ${data.developer}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                ${data.count} changes
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-root">
+                        <ul class="-mb-8">
+                            ${sortedChanges.map((change, idx) => `
+                                <li>
+                                    <div class="relative pb-8">
+                                        ${idx < sortedChanges.length - 1 ? `
+                                            <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                                        ` : ''}
+                                        <div class="relative flex space-x-3">
+                                            <div>
+                                                <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
+                                                    <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <div>
+                                                    <div class="text-sm">
+                                                        <a href="#" class="font-medium text-gray-900">${change.changeSummary}</a>
+                                                    </div>
+                                                    <p class="mt-0.5 text-sm text-gray-500">
+                                                        ${new Date(change.date).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    ${change.tags.map(tag => `
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                            ${tag}
+                                                        </span>
+                                                    `).join('')}
+                                                    ${change.impactAreas.map(area => `
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                                            ${area}
+                                                        </span>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

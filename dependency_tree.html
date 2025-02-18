@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repository Dependencies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .node circle {
+            fill: #fff;
+            stroke: #999;
+            stroke-width: 2px;
+        }
+        .node text {
+            font: 12px sans-serif;
+        }
+        .link {
+            fill: none;
+            stroke: #999;
+            stroke-width: 2px;
+        }
+        .dependency-link {
+            fill: none;
+            stroke: #ff4444;
+            stroke-width: 2px;
+            stroke-dasharray: 5,5;
+        }
+        .author-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 12px;
+        }
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 12px;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold text-gray-900">Repository Dependencies</h1>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="commits_report.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Commits Report
+                            </a>
+                            <a href="code_heatmap.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Change Patterns
+                            </a>
+                            <a href="dependency_tree.html" class="border-indigo-500 text-indigo-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Dependencies
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Controls -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="expand-all" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Expand All
+                        </button>
+                        <button id="collapse-all" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                            Collapse All
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-3 h-3 bg-blue-200 rounded-full"></span>
+                            <span class="text-sm text-gray-600">Stefan Vermaas</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-3 h-3 bg-green-200 rounded-full"></span>
+                            <span class="text-sm text-gray-600">Cesar De Casas</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-block w-3 h-3 bg-purple-200 rounded-full"></span>
+                            <span class="text-sm text-gray-600">Ben Zohar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <div id="tree-container" style="width: 100%; height: 800px;"></div>
+            </div>
+
+            <!-- Timeline Report -->
+            <div class="bg-white shadow rounded-lg p-6 mt-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">Dependency Timeline Report</h2>
+                
+                <!-- Timeline -->
+                <div class="relative">
+                    <!-- Timeline line -->
+                    <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+
+                    <!-- January 5, 2025 - Cesar's Initial Changes -->
+                    <div class="relative pl-20 pb-8">
+                        <div class="absolute left-8 -ml-3 mt-2">
+                            <div class="w-6 h-6 bg-green-200 rounded-full border-4 border-white"></div>
+                        </div>
+                        <div class="font-medium text-sm text-gray-500 mb-2">January 5, 2025</div>
+                        <h3 class="text-lg font-medium text-gray-900">Cesar De Casas - Shopify Integration Setup</h3>
+                        <div class="mt-2 text-gray-600">
+                            <p class="mb-2">Modified multiple components:</p>
+                            <ul class="list-disc pl-5 mb-2 text-sm">
+                                <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/main/extensions/checkout-ui-extension/src/components/footer/footer.tsx" class="text-blue-600 hover:underline">footer.tsx</a></code> with dependencies on:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li><code>@shopify/ui-extensions-react/checkout</code></li>
+                                        <li><code>react</code></li>
+                                    </ul>
+                                </li>
+                                <li>Updated configuration files:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/3229308/shopify.app.prod.toml" class="text-blue-600 hover:underline">shopify.app.prod.toml</a></code></li>
+                                        <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/3229308/shopify.app.staging.toml" class="text-blue-600 hover:underline">shopify.app.staging.toml</a></code></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="mt-2 p-2 bg-blue-50 rounded border border-blue-200 text-sm">
+                                <strong>Integration Note:</strong> Foundation for Shopify integration components
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- January 10, 2025 - Cesar's Widget System -->
+                    <div class="relative pl-20 pb-8">
+                        <div class="absolute left-8 -ml-3 mt-2">
+                            <div class="w-6 h-6 bg-green-200 rounded-full border-4 border-white"></div>
+                        </div>
+                        <div class="font-medium text-sm text-gray-500 mb-2">January 10, 2025</div>
+                        <h3 class="text-lg font-medium text-gray-900">Cesar De Casas - Widget System Enhancement</h3>
+                        <div class="mt-2 text-gray-600">
+                            <p class="mb-2">Major widget system update:</p>
+                            <ul class="list-disc pl-5 mb-2 text-sm">
+                                <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/blob/f8fcb730/src/components/shopify/shopify.ts" class="text-blue-600 hover:underline">shopify.ts</a></code> component:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>Campaign validation system</li>
+                                        <li>Cookie-based state management</li>
+                                    </ul>
+                                </li>
+                                <li>Widget updates:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/blob/f8fcb730/src/widgets/addon/general-addon-widget.ts" class="text-blue-600 hover:underline">general-addon-widget.ts</a></code>: Campaign filtering</li>
+                                        <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/blob/f8fcb730/src/widgets/addon/shopify-addon-widget.ts" class="text-blue-600 hover:underline">shopify-addon-widget.ts</a></code>: Enhanced tracking</li>
+                                        <li><code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/blob/f8fcb730/src/widgets/roundup/roundup-widget.ts" class="text-blue-600 hover:underline">roundup-widget.ts</a></code>: Donation eligibility</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-200 text-sm">
+                                <strong>Critical Dependencies:</strong> These changes affect all donation-related features
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- January 27, 2025 - Stefan's Extension Work -->
+                    <div class="relative pl-20 pb-8">
+                        <div class="absolute left-8 -ml-3 mt-2">
+                            <div class="w-6 h-6 bg-blue-200 rounded-full border-4 border-white"></div>
+                        </div>
+                        <div class="font-medium text-sm text-gray-500 mb-2">January 27, 2025</div>
+                        <h3 class="text-lg font-medium text-gray-900">Stefan Vermaas - Multi-Platform Extensions</h3>
+                        <div class="mt-2 text-gray-600">
+                            <p class="mb-2">Comprehensive extension updates:</p>
+                            <ul class="list-disc pl-5 mb-2 text-sm">
+                                <li>POS UI Extension:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>New <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/dd17d98/extensions/pos-ui-extension/src/Modal.tsx" class="text-blue-600 hover:underline">Modal.tsx</a></code> and <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/dd17d98/extensions/pos-ui-extension/src/Tile.tsx" class="text-blue-600 hover:underline">Tile.tsx</a></code></li>
+                                        <li>API version: 2025-01</li>
+                                    </ul>
+                                </li>
+                                <li>Development Environment:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>New <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/blob/8dfae87/shopify.app.toml" class="text-blue-600 hover:underline">shopify.app.toml</a></code> configuration</li>
+                                        <li>Enhanced webhook endpoints</li>
+                                        <li>Privacy compliance updates</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="mt-2 p-2 bg-purple-50 rounded border border-purple-200 text-sm">
+                                <strong>Platform Note:</strong> Extended Shopify integration to POS system
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- February 5-6, 2025 - API Synchronization -->
+                    <div class="relative pl-20 pb-8">
+                        <div class="absolute left-8 -ml-3 mt-2">
+                            <div class="w-6 h-6 bg-blue-200 rounded-full border-4 border-white"></div>
+                        </div>
+                        <div class="font-medium text-sm text-gray-500 mb-2">February 5-6, 2025</div>
+                        <h3 class="text-lg font-medium text-gray-900">Stefan Vermaas - API Version Synchronization</h3>
+                        <div class="mt-2 text-gray-600">
+                            <p class="mb-2">API version updates across extensions:</p>
+                            <ul class="list-disc pl-5 mb-2 text-sm">
+                                <li>Checkout UI Extension:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>Upgraded to API version 2024-07</li>
+                                        <li>Enhanced security settings</li>
+                                    </ul>
+                                </li>
+                                <li>Post-Purchase Extension:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>Synchronized to API version 2024-07</li>
+                                        <li>Added new feature flags</li>
+                                        <li>Performance optimizations</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="mt-2 p-2 bg-yellow-50 rounded border border-yellow-200 text-sm">
+                                <strong>Version Note:</strong> All extensions now on synchronized API versions
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- February 12, 2025 - Ben's Backend Changes -->
+                    <div class="relative pl-20 pb-8">
+                        <div class="absolute left-8 -ml-3 mt-2">
+                            <div class="w-6 h-6 bg-purple-200 rounded-full border-4 border-white"></div>
+                        </div>
+                        <div class="font-medium text-sm text-gray-500 mb-2">February 12, 2025</div>
+                        <h3 class="text-lg font-medium text-gray-900">Ben Zohar - Store API Updates</h3>
+                        <div class="mt-2 text-gray-600">
+                            <p class="mb-2">Backend service enhancements:</p>
+                            <ul class="list-disc pl-5 mb-2 text-sm">
+                                <li>Store Activation System:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li>New <code>IsExperienceActive</code> state handling</li>
+                                        <li>Enhanced null safety in queries</li>
+                                    </ul>
+                                </li>
+                                <li>Dependencies:
+                                    <ul class="list-disc pl-5 text-xs text-gray-500">
+                                        <li><code>ChangeCommerce.Stores.Common.Models</code></li>
+                                        <li><code>Shopping.Gives.CQRS.Postgresql.std</code></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div class="mt-2 p-2 bg-blue-50 rounded border border-blue-200 text-sm">
+                                <strong>Architecture Note:</strong> Store activation changes affect all UI components
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Box -->
+                    <div class="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Key Insights</h3>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>🔄 <strong>Cross-Team Dependencies:</strong>
+                                <ul class="list-disc pl-5 mt-1 text-xs">
+                                    <li>UI changes (Cesar/Stefan) tightly coupled in checkout flow</li>
+                                    <li>Widget system affects multiple platforms (Web, POS)</li>
+                                </ul>
+                            </li>
+                            <li>🏗️ <strong>Architecture Evolution:</strong>
+                                <ul class="list-disc pl-5 mt-1 text-xs">
+                                    <li>Backend changes (Ben) impact frontend through store activation</li>
+                                    <li>API version synchronization across all extensions</li>
+                                </ul>
+                            </li>
+                            <li>📦 <strong>Critical Components:</strong>
+                                <ul class="list-disc pl-5 mt-1 text-xs">
+                                    <li><code>shopping-gives.js</code> used across multiple extensions</li>
+                                    <li>Campaign validation system affects all donation features</li>
+                                    <li>Store activation state impacts all UI components</li>
+                                </ul>
+                            </li>
+                            <li>🔍 <strong>Recommendations:</strong>
+                                <ul class="list-disc pl-5 mt-1 text-xs">
+                                    <li>Implement strict API contracts between UI components</li>
+                                    <li>Consider versioning for shared components</li>
+                                    <li>Add automated tests for cross-component dependencies</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bug Analysis Report -->
+            <div class="bg-white shadow rounded-lg p-6 mt-8">
+                <h2 class="text-lg font-medium text-gray-900 mb-4">Bug Analysis Report</h2>
+                
+                <div class="space-y-6">
+                    <!-- Cart Controller TrackingID Issue -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">Cart Controller TrackingID Issue</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Cart controller not providing trackingID to get-multiple-donations</p>
+                            <p class="mb-2"><strong>Related Changes:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>Commit <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/commit/f8fcb730" class="text-blue-600 hover:underline">f8fcb730</a></code> by Cesar (Jan 10, 2025)</li>
+                                <li>Modified: <code>src/components/tracking-loader/tracking-loader.ts</code></li>
+                            </ul>
+                            <p><strong>Analysis:</strong> Tracking initialization changes may have broken cart controller integration</p>
+                        </div>
+                    </div>
+
+                    <!-- SDK Cart Handler Issue -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">SDK Cart Handler Missing Confirmation</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Missing set confirmation data function (merge conflict from Sept 29)</p>
+                            <p class="mb-2"><strong>Potential Files:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li><code>src/widgets/addon/shopify-addon-widget.ts</code></li>
+                                <li><code>extensions/checkout-ui-extension/src/index.tsx</code></li>
+                            </ul>
+                            <p><strong>Note:</strong> Check master branch history around September 29th for merge conflicts</p>
+                        </div>
+                    </div>
+
+                    <!-- Custom Segments Branch Issue -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">Hills Pet Custom Segments Issue</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Wrong branch usage causing custom segments to break</p>
+                            <p class="mb-2"><strong>Related Changes:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>API version updates by Stefan (Feb 5-6, 2025) - Commit <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.ShopifyAppExt/commit/1200f23" class="text-blue-600 hover:underline">1200f23</a></code></li>
+                                <li>Affected: <code>extensions/checkout-ui-extension/shopify.extension.toml</code></li>
+                            </ul>
+                            <p><strong>Action Required:</strong> Verify branch synchronization across all extensions</p>
+                        </div>
+                    </div>
+
+                    <!-- Add-on Donation Removal -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">Add-on Donation Removal Issue</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Add-on donations being removed from checkout</p>
+                            <p class="mb-2"><strong>Evidence in Commit:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>Commit message: "Only check allow customer donation if campaign is active"</li>
+                                <li>Modified: <code>src/widgets/addon/general-addon-widget.ts</code></li>
+                                <li>Date: January 10, 2025 - Commit <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Utilities.JS/commit/f8fcb730" class="text-blue-600 hover:underline">f8fcb730</a></code></li>
+                            </ul>
+                            <p><strong>Focus Area:</strong> Check default state in campaign validation logic</p>
+                        </div>
+                    </div>
+
+                    <!-- Round-up GraphQL Error -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">Round-up GraphQL Error</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Invalid global ID format in product variant reference</p>
+                            <p class="mb-2"><strong>Related Changes:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>Ben's Store API Updates (Feb 12, 2025) - Commit <code><a href="https://github.com/NicheInteractiveMedia/ChangeCommerce.Stores.API/commit/2ef3bc5" class="text-blue-600 hover:underline">2ef3bc5</a></code></li>
+                                <li>Affected: <code>src/ChangeCommerce.Stores.API/Controllers/StoreController.cs</code></li>
+                            </ul>
+                            <p><strong>Error Details:</strong> GraphQL schema mismatch in product variant references</p>
+                        </div>
+                    </div>
+
+                    <!-- Utilities.JS Tracking Issue -->
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                        <h3 class="text-md font-medium text-red-800 mb-2">Utilities.JS Tracking/Cause Settings Issue</h3>
+                        <div class="text-sm text-red-700">
+                            <p class="mb-2"><strong>Bug:</strong> Add-on donation widget not pulling tracking for cause settings</p>
+                            <p class="mb-2"><strong>Related Files:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li><code>src/components/tracking-loader/tracking-loader.ts</code></li>
+                                <li><code>src/widgets/addon/shopify-addon-widget.ts</code></li>
+                            </ul>
+                            <p><strong>Investigation Path:</strong> Review tracking initialization in Cesar's January 10th changes</p>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <h3 class="text-md font-medium text-blue-800 mb-2">Resolution Recommendations</h3>
+                        <div class="text-sm text-blue-700 space-y-2">
+                            <p>1. <strong>Immediate Actions:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>Review campaign validation logic in addon widgets</li>
+                                <li>Verify API version consistency across all extensions</li>
+                                <li>Check tracking initialization flow</li>
+                            </ul>
+                            
+                            <p>2. <strong>Technical Debt:</strong></p>
+                            <ul class="list-disc pl-5 mb-2">
+                                <li>Implement comprehensive integration tests for cart flow</li>
+                                <li>Add GraphQL schema validation in CI/CD</li>
+                                <li>Create automated branch synchronization checks</li>
+                            </ul>
+
+                            <p>3. <strong>Long-term Improvements:</strong></p>
+                            <ul class="list-disc pl-5">
+                                <li>Centralize tracking management</li>
+                                <li>Implement strict API contracts between components</li>
+                                <li>Add automated testing for cross-component dependencies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tree data structure
+        const treeData = {
+            name: "Repositories",
+            children: [
+                {
+                    name: "ChangeCommerce.ShopifyAppExt",
+                    children: [
+                        {
+                            name: "extensions",
+                            children: [
+                                {
+                                    name: "checkout-ui-extension",
+                                    author: "Stefan Vermaas",
+                                    children: [
+                                        {
+                                            name: "src",
+                                            children: [
+                                                {
+                                                    name: "index.tsx",
+                                                    author: "Stefan Vermaas",
+                                                    changes: 6,
+                                                    dependencies: ["shopping-gives.js", "footer.tsx"]
+                                                },
+                                                {
+                                                    name: "components",
+                                                    children: [
+                                                        {
+                                                            name: "footer.tsx",
+                                                            author: "Cesar De Casas",
+                                                            changes: 2
+                                                        },
+                                                        {
+                                                            name: "Placeholder.tsx",
+                                                            author: "Stefan Vermaas",
+                                                            changes: 1
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            name: "vendor",
+                                            children: [
+                                                {
+                                                    name: "shopping-gives.js",
+                                                    author: "Stefan Vermaas",
+                                                    changes: 2
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: "pos-ui-extension",
+                                    author: "Stefan Vermaas",
+                                    children: [
+                                        {
+                                            name: "src",
+                                            children: [
+                                                {
+                                                    name: "Modal.tsx",
+                                                    author: "Stefan Vermaas",
+                                                    changes: 1
+                                                },
+                                                {
+                                                    name: "Tile.tsx",
+                                                    author: "Stefan Vermaas",
+                                                    changes: 1
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: "config",
+                            children: [
+                                {
+                                    name: "shopify.app.toml",
+                                    author: "Stefan Vermaas",
+                                    changes: 1,
+                                    affects: ["checkout-ui-extension", "pos-ui-extension"]
+                                },
+                                {
+                                    name: "shopify.app.prod.toml",
+                                    author: "Cesar De Casas",
+                                    changes: 2,
+                                    affects: ["checkout-ui-extension", "pos-ui-extension"]
+                                },
+                                {
+                                    name: "shopify.app.staging.toml",
+                                    author: "Cesar De Casas",
+                                    changes: 2,
+                                    affects: ["checkout-ui-extension", "pos-ui-extension"]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "ChangeCommerce.Utilities.JS",
+                    children: [
+                        {
+                            name: "src",
+                            children: [
+                                {
+                                    name: "components",
+                                    children: [
+                                        {
+                                            name: "shopify",
+                                            children: [
+                                                {
+                                                    name: "shopify.ts",
+                                                    author: "Cesar De Casas",
+                                                    changes: 2,
+                                                    affects: ["checkout-ui-extension"]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            name: "tracking-loader",
+                                            children: [
+                                                {
+                                                    name: "tracking-loader.ts",
+                                                    author: "Cesar De Casas",
+                                                    changes: 2
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: "widgets",
+                                    children: [
+                                        {
+                                            name: "addon",
+                                            children: [
+                                                {
+                                                    name: "general-addon-widget.ts",
+                                                    author: "Cesar De Casas",
+                                                    changes: 2
+                                                },
+                                                {
+                                                    name: "shopify-addon-widget.ts",
+                                                    author: "Cesar De Casas",
+                                                    changes: 2,
+                                                    dependencies: ["shopify.ts"]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Set up the D3 tree layout
+        const margin = {top: 20, right: 90, bottom: 30, left: 90};
+        const width = 1200 - margin.left - margin.right;
+        const height = 800 - margin.top - margin.bottom;
+
+        const svg = d3.select("#tree-container")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Create a tooltip
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Create the tree layout
+        const tree = d3.tree().size([height, width]);
+
+        // Convert the data into D3 hierarchical format
+        const root = d3.hierarchy(treeData);
+
+        // Assign initial positions
+        tree(root);
+
+        // Create links
+        const link = svg.selectAll(".link")
+            .data(root.links())
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", d3.linkHorizontal()
+                .x(d => d.y)
+                .y(d => d.x));
+
+        // Create nodes
+        const node = svg.selectAll(".node")
+            .data(root.descendants())
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.y},${d.x})`);
+
+        // Add circles to nodes
+        node.append("circle")
+            .attr("r", 6)
+            .style("fill", d => {
+                if (!d.data.author) return "#fff";
+                switch(d.data.author) {
+                    case "Stefan Vermaas": return "#93c5fd";
+                    case "Cesar De Casas": return "#86efac";
+                    case "Ben Zohar": return "#e9d5ff";
+                    default: return "#fff";
+                }
+            });
+
+        // Add labels to nodes
+        node.append("text")
+            .attr("dy", ".35em")
+            .attr("x", d => d.children ? -13 : 13)
+            .style("text-anchor", d => d.children ? "end" : "start")
+            .text(d => d.data.name)
+            .on("mouseover", function(event, d) {
+                if (d.data.author || d.data.dependencies || d.data.affects) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    
+                    let html = "";
+                    if (d.data.author) {
+                        html += `<div class="font-medium">Author: ${d.data.author}</div>`;
+                    }
+                    if (d.data.changes) {
+                        html += `<div class="text-sm text-gray-600">Changes: ${d.data.changes}</div>`;
+                    }
+                    if (d.data.dependencies) {
+                        html += `
+                            <div class="mt-2">
+                                <div class="font-medium">Dependencies:</div>
+                                <ul class="text-sm">
+                                    ${d.data.dependencies.map(dep => `<li>• ${dep}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    if (d.data.affects) {
+                        html += `
+                            <div class="mt-2">
+                                <div class="font-medium">Affects:</div>
+                                <ul class="text-sm">
+                                    ${d.data.affects.map(a => `<li>• ${a}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    
+                    tooltip.html(html)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                }
+            })
+            .on("mouseout", function() {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        // Add dependency links
+        function addDependencyLinks() {
+            // Clear existing dependency links
+            svg.selectAll(".dependency-link").remove();
+
+            // Create new dependency links
+            root.descendants().forEach(node => {
+                if (node.data.dependencies) {
+                    node.data.dependencies.forEach(depName => {
+                        const target = root.descendants().find(n => n.data.name === depName);
+                        if (target) {
+                            svg.append("path")
+                                .attr("class", "dependency-link")
+                                .attr("d", d3.linkHorizontal()
+                                    .x(d => d.y)
+                                    .y(d => d.x)
+                                    ({
+                                        source: {x: node.x, y: node.y},
+                                        target: {x: target.x, y: target.y}
+                                    }));
+                        }
+                    });
+                }
+            });
+        }
+
+        // Add dependency links initially
+        addDependencyLinks();
+
+        // Handle expand/collapse buttons
+        document.getElementById('expand-all').addEventListener('click', () => {
+            root.descendants().forEach(d => {
+                if (d._children) {
+                    d.children = d._children;
+                    d._children = null;
+                }
+            });
+            update(root);
+        });
+
+        document.getElementById('collapse-all').addEventListener('click', () => {
+            root.descendants().forEach(d => {
+                if (d.children && d.depth > 0) {
+                    d._children = d.children;
+                    d.children = null;
+                }
+            });
+            update(root);
+        });
+
+        // Update the tree
+        function update(source) {
+            const duration = 750;
+
+            // Compute the new tree layout
+            const nodes = root.descendants();
+            const links = root.links();
+
+            // Normalize for fixed-depth
+            nodes.forEach(d => { d.y = d.depth * 180; });
+
+            // Update nodes
+            const node = svg.selectAll('g.node')
+                .data(nodes, d => d.id || (d.id = ++i));
+
+            // Update links
+            const link = svg.selectAll('path.link')
+                .data(links, d => d.target.id);
+
+            // Transition exiting nodes to the parent's new position
+            const nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", d => `translate(${source.y},${source.x})`)
+                .remove();
+
+            // Update the links
+            link.transition()
+                .duration(duration)
+                .attr('d', d3.linkHorizontal()
+                    .x(d => d.y)
+                    .y(d => d.x));
+
+            // Remove any exiting links
+            link.exit().transition()
+                .duration(duration)
+                .attr('d', d3.linkHorizontal()
+                    .x(d => source.y)
+                    .y(d => source.x))
+                .remove();
+
+            // Update dependency links
+            addDependencyLinks();
+        }
+    </script>
+</body>
+</html>
