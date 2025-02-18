@@ -1,0 +1,739 @@
+=== ChangeCommerce.Products.API ===
+commit 9e06f42fa2067072b699c9411b1e60a37fee398c
+Author: Ben Zohar <benmzohar@gmail.com>
+Date:   Thu Jan 23 15:46:56 2025 -0600
+
+    edgecase fix for first page ignoring first product.
+
+ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs
+
+=== ChangeCommerce.ShopifyAppExt ===
+
+Commit e87d78e:
+commit e87d78ee79b7cc6a5c8d305c1f4b071a6389fb7a
+Merge: c7e93e8 3e6fdb4
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 17 17:25:06 2025 +0100
+
+    Merge pull request #79 from NicheInteractiveMedia/SV/show-cause-details
+    
+    Display the details about the selected cause
+
+
+Commit 3e6fdb4:
+commit 3e6fdb4a4c48d472a80486a29754847492729816
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:58:44 2025 +0100
+
+    Alter the current cause to navigate to the cause itself.
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+extensions/pos-ui-extension/src/components/Modal.tsx
+
+Commit 17ae5a8:
+commit 17ae5a875b0f5b73ebd026ff0bcea823514ea644
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:58:29 2025 +0100
+
+    Adds the new screen to show the current cause
+
+extensions/pos-ui-extension/src/screens/ShowCause.tsx
+
+Commit c7e93e8:
+commit c7e93e8860c8dcf900b9bf7e025e1694d2bed07c
+Merge: e83a551 5d6bb04
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 17 16:17:12 2025 +0100
+
+    Merge pull request #78 from NicheInteractiveMedia/SV/add-on-donation-by-customer
+    
+    Adds the ability to self-donate
+
+
+Commit 5d6bb04:
+commit 5d6bb048c52fa3c01adfe70c1c350db8b2bdc6b4
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:09:56 2025 +0100
+
+    Adds the ability for customers to add their own donations too.
+
+extensions/pos-ui-extension/src/components/AddOnSection.tsx
+extensions/pos-ui-extension/src/screens/Overview.tsx
+
+Commit 0f99e7f:
+commit 0f99e7fd93a927c9a2e7d6380df460be0e1c7b65
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:09:44 2025 +0100
+
+    Adds a native groupBy because Shopify POS doesn't have access to Object.groupBy
+
+extensions/pos-ui-extension/src/utils.ts
+
+Commit 7a2db7f:
+commit 7a2db7fe0afa9fda5983e52b701466ed8111c7bb
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:09:25 2025 +0100
+
+    Extend the types for the add-ons information
+
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 28015b3:
+commit 28015b31f7427064767abb9fa47f17f027900a02
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 16:09:08 2025 +0100
+
+    Properly assign the CMSMetaData in the SDK.
+
+extensions/pos-ui-extension/vendor/shopping-gives-sdk.js
+
+Commit e83a551:
+commit e83a55168e4d78801cd156ed12840bdac8962bc0
+Merge: 8088702 cf18d59
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 17 12:43:08 2025 +0100
+
+    Merge pull request #77 from NicheInteractiveMedia/SV/select-a-cause
+    
+    Introduce the selection of causes
+
+
+Commit cf18d59:
+commit cf18d59cdefbda1e1954159ca2d1625e95b63404
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:42:38 2025 +0100
+
+    Remove the LoadingIndicator component
+
+extensions/pos-ui-extension/src/components/LoadingIndicator.tsx
+
+Commit ca3ad10:
+commit ca3ad103da427ddfed1c58767859f330d3ff5e59
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:31:54 2025 +0100
+
+    Adds the ability to change the cause
+
+extensions/pos-ui-extension/src/components/CauseSelector.tsx
+extensions/pos-ui-extension/src/components/Modal.tsx
+extensions/pos-ui-extension/src/screens/EditCause.tsx
+extensions/pos-ui-extension/src/screens/Overview.tsx
+
+Commit 9f719c1:
+commit 9f719c11ad0267905d4bc71868502e0b84dc9f23
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:31:45 2025 +0100
+
+    Correctly set the return value of the cause's headline
+
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 681e0da:
+commit 681e0dae0c13871a39b9f76bd13077cc3b89abf7
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:31:26 2025 +0100
+
+    Conditionally show/hide the option to select a cause.
+
+extensions/pos-ui-extension/src/components/CauseSection.tsx
+
+Commit 5da03f9:
+commit 5da03f9619d75390c03b7b67bb58943c9f6d75c1
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:30:55 2025 +0100
+
+    Default to an empty string when the headline is missing and use a smaller logo
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+
+Commit 55e5a13:
+commit 55e5a130cd89381a2d833dac28b99f2f8e76b5ba
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 12:30:19 2025 +0100
+
+    Expose all causes through the useCause hook
+
+extensions/pos-ui-extension/src/components/CauseProvider.tsx
+
+Commit 5ef10c4:
+commit 5ef10c44b083f8aa458ec48932af433893a26051
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 11:31:45 2025 +0100
+
+    Create a new CauseSection component and a placeholder for the CauseSelector
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+extensions/pos-ui-extension/src/components/CauseSection.tsx
+extensions/pos-ui-extension/src/components/CauseSelector.tsx
+extensions/pos-ui-extension/src/components/Modal.tsx
+
+Commit c338495:
+commit c3384957b354176d31a170ec7ef2a6d65b73e71b
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 11:25:25 2025 +0100
+
+    Correct the types and use the CauseProvider in the ActiveCause.
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+extensions/pos-ui-extension/src/types.tsx
+
+Commit df0888f:
+commit df0888f83daa556ba79474afc7c183da82874c5d
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 11:25:11 2025 +0100
+
+    Standardize a loading indicator
+
+extensions/pos-ui-extension/src/components/LoadingIndicator.tsx
+
+Commit f2bde29:
+commit f2bde29ffafce987d4709f8dd80429b04771c65a
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 11:24:51 2025 +0100
+
+    Include the new CauseProvider in the modal (only there)
+
+extensions/pos-ui-extension/src/components/Modal.tsx
+
+Commit 5cfc1fa:
+commit 5cfc1fa32a5bbb9ade547a26214686bf86330f7a
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 11:24:22 2025 +0100
+
+    Create a CauseProvider component to manage the state of the cause
+
+extensions/pos-ui-extension/src/components/CauseProvider.tsx
+
+Commit 8088702:
+commit 8088702dc9fc26be8f041a67f9363bc4aa93fbe9
+Merge: 117c5a4 a1787e7
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 17 11:01:15 2025 +0100
+
+    Merge pull request #76 from NicheInteractiveMedia/SV/rename-tile-and-modal
+    
+    Consistently name the Tile and Modal
+
+
+Commit a1787e7:
+commit a1787e731a9ca9d3ffe745d04457425b1420d35a
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 10:59:35 2025 +0100
+
+    Use a consistent setup for the modal and tile
+
+extensions/pos-ui-extension/src/ExtensionModal.tsx
+extensions/pos-ui-extension/src/ExtensionTile.tsx
+extensions/pos-ui-extension/src/components/Modal.tsx
+extensions/pos-ui-extension/src/components/Tile.tsx
+
+Commit 0e79aa0:
+commit 0e79aa03dd369332c321d1fc4ed14278c0cf8e48
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 10:54:45 2025 +0100
+
+    Use the prefix Extension for the main entrypoints: Modal and Tile
+
+extensions/pos-ui-extension/shopify.extension.toml
+extensions/pos-ui-extension/src/ExtensionModal.tsx
+extensions/pos-ui-extension/src/ExtensionTile.tsx
+extensions/pos-ui-extension/src/Tile.tsx
+
+Commit 117c5a4:
+commit 117c5a498fbc41f0f562c9cbe6c06e36e3bb250c
+Merge: 76a9594 c134e52
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 17 10:52:29 2025 +0100
+
+    Merge pull request #75 from NicheInteractiveMedia/SV/rename-store-to-session
+    
+    Rename the `CartProvider` to `SessionProvider`
+
+
+Commit c134e52:
+commit c134e520489122690ad9b28de450581ac4ee6452
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 10:50:59 2025 +0100
+
+    Remove the unused types for more explicit type names
+
+extensions/pos-ui-extension/src/types.tsx
+
+Commit c4128c0:
+commit c4128c0f97bb0b31ead590c883249727fef0066b
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 17 10:50:01 2025 +0100
+
+    Rename the CartProvider to SessionProvider
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+extensions/pos-ui-extension/src/components/AppProvider.tsx
+extensions/pos-ui-extension/src/components/CartProvider.tsx
+extensions/pos-ui-extension/src/components/SessionProvider.tsx
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 76a9594:
+commit 76a9594a4e82636244111787d6893a31c4c8a1df
+Merge: d088687 71a9f7c
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Thu Feb 13 19:15:17 2025 +0100
+
+    Merge pull request #74 from NicheInteractiveMedia/SV/detect-store-configuration
+    
+    Automatically detect the store configuration
+
+
+Commit 71a9f7c:
+commit 71a9f7c359dafb454e5be38b5217436193934165
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Thu Feb 13 19:07:45 2025 +0100
+
+    Fetch the store ID from the API
+
+extensions/pos-ui-extension/src/api.tsx
+extensions/pos-ui-extension/src/components/CartProvider.tsx
+extensions/pos-ui-extension/src/components/StoreProvider.tsx
+extensions/pos-ui-extension/src/components/WidgetTile.tsx
+
+Commit d088687:
+commit d0886872c256fbaacb455d03433fae884bbe2294
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:54:36 2025 +0100
+
+    Format the active cause properly
+
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+
+Commit f273eff:
+commit f273eff2d9322f19d874d40d3e8927262d8a7191
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:41:07 2025 +0100
+
+    Renders the active cause
+
+extensions/pos-ui-extension/src/Modal.tsx
+extensions/pos-ui-extension/src/components/ActiveCause.tsx
+
+Commit c66662c:
+commit c66662c82bdc23305feefa492276a6cbb07bb801
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:40:55 2025 +0100
+
+    Expose the cart data and client through the CartProvider
+
+extensions/pos-ui-extension/src/components/CartProvider.tsx
+
+Commit eeacf9f:
+commit eeacf9fb3b06e3cacf602a553e12c516f73346a8
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:40:30 2025 +0100
+
+    Export all relevant types to the app
+
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 75def5d:
+commit 75def5de37902e446285bb6a9086c13d17736204
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:40:16 2025 +0100
+
+    Adds a component to display text that is too long to be displayed.
+
+extensions/pos-ui-extension/src/components/TruncatedText.tsx
+
+Commit a882655:
+commit a8826552f6437e929c2a075e84d9f2307551004c
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 16:33:18 2025 +0100
+
+    Remove the outdated WidgetProvider
+
+extensions/pos-ui-extension/src/components/WidgetProvider.tsx
+
+Commit d690ba1:
+commit d690ba12821d836b1feacfe83ae90ce4efe67dcc
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 12:55:11 2025 +0100
+
+    Use the most recent version of the Shopping Gives SDK
+
+extensions/pos-ui-extension/src/components/CartProvider.tsx
+extensions/pos-ui-extension/vendor/shopping-gives-sdk.js
+
+Commit 659f34f:
+commit 659f34f27ac519e3fa48ca825bd27d2d7667fb61
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 12:54:56 2025 +0100
+
+    Use the dev shopify.app.toml of Codeture
+
+shopify.app.toml
+
+Commit a4404de:
+commit a4404de08c961d7b3b7fe76748bb792d9f481e07
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Feb 10 12:54:37 2025 +0100
+
+    Disable the ESLint and Prettier configuration as they're not accessible.
+
+.eslintrc.json
+.prettierrc
+package.json
+
+Commit d5d8087:
+commit d5d8087aa03764d986a2a13c168e7d3c9ac80eea
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Thu Feb 6 14:52:05 2025 +0100
+
+    Adds the CartProvider that initialized the cart for the app
+
+extensions/pos-ui-extension/src/components/AppProvider.tsx
+extensions/pos-ui-extension/src/components/CartProvider.tsx
+extensions/pos-ui-extension/src/components/StoreProvider.tsx
+extensions/pos-ui-extension/src/components/WidgetTile.tsx
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 51e2a6b:
+commit 51e2a6be96e00ab0ffb1ca26b5624e1a0cf068fe
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Thu Feb 6 14:10:29 2025 +0100
+
+    Add a StoreProvider to gather the details about the store.
+
+extensions/pos-ui-extension/src/api.tsx
+extensions/pos-ui-extension/src/components/AppProvider.tsx
+extensions/pos-ui-extension/src/components/StoreProvider.tsx
+extensions/pos-ui-extension/src/types.tsx
+
+Commit c3019b1:
+commit c3019b1ca9419fee53ddb33e71a6f64d36068671
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Thu Feb 6 12:36:19 2025 +0100
+
+    Add a CacheProvider to solve the caching issue
+
+extensions/pos-ui-extension/src/Modal.tsx
+extensions/pos-ui-extension/src/Tile.tsx
+extensions/pos-ui-extension/src/components/AppProvider.tsx
+extensions/pos-ui-extension/src/components/CacheProvider.tsx
+extensions/pos-ui-extension/src/components/WidgetTile.tsx
+
+Commit d6eddc5:
+commit d6eddc5a477dee82737dbc8973422213d148df49
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Tue Feb 4 16:42:36 2025 +0100
+
+    Correctly reference the WidgetTile and WidgetProvider
+
+extensions/pos-ui-extension/src/Tile.tsx
+
+Commit 566d6c9:
+commit 566d6c966d1300ad0dacdedbcbe83dc7ce83fabc
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Tue Feb 4 13:26:21 2025 +0100
+
+    Moved the component files into the src directory
+
+extensions/pos-ui-extension/src/components/WidgetProvider.tsx
+extensions/pos-ui-extension/src/components/WidgetTile.tsx
+
+Commit dccc640:
+commit dccc640a10351782241fd063ce3ba95fe8a30ec1
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Tue Feb 4 13:24:16 2025 +0100
+
+    Enable Tile after fetching the store's configuration and checking its status.
+
+extensions/pos-ui-extension/components/WidgetProvider.tsx
+extensions/pos-ui-extension/components/WidgetTile.tsx
+extensions/pos-ui-extension/src/Tile.tsx
+extensions/pos-ui-extension/src/api.tsx
+extensions/pos-ui-extension/src/types.tsx
+
+Commit 79a25d7:
+commit 79a25d7c3318e46c775bf123ccb41af6dc921288
+Merge: 22f0003 1200f23
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Tue Feb 11 17:46:41 2025 +0100
+
+    Merge pull request #69 from NicheInteractiveMedia/SV/fix-checkout-ui-extension-rendering
+    
+    Hide the checkout UI extension when the store is inactive
+
+
+Commit 1200f23:
+commit 1200f2315725591dff2ae81de8102013b07e9f7f
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 10 20:46:44 2025 +0100
+
+    Use the vendored JS SDK
+
+extensions/checkout-ui-extension/src/index.tsx
+
+Commit 61dca93:
+commit 61dca9345f6baac6f115edb8298d59c66b6bff1b
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 10 20:46:27 2025 +0100
+
+    Format the vendored SDK
+
+extensions/checkout-ui-extension/vendor/shopping-gives.js
+
+Commit eb36339:
+commit eb36339a388c0161a749d8440be33f46b9f26ff9
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Feb 10 20:41:01 2025 +0100
+
+    Use a vendored version of the SDK for the checkout UI extension
+
+extensions/checkout-ui-extension/src/index.tsx
+extensions/checkout-ui-extension/vendor/shopping-gives.js
+
+Commit bf1d5df:
+commit bf1d5df2d333e2de979e208e1e3e8ef8dccc359f
+Merge: ca127f3 22f0003
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Sun Feb 9 19:28:57 2025 +0100
+
+    Merge branch 'master' into SV/fix-checkout-ui-extension-rendering
+
+
+Commit 22f0003:
+commit 22f0003aac536fe54547971116f139ef55476b86
+Merge: fb372d4 8808825
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Fri Feb 7 14:45:41 2025 +0100
+
+    Merge pull request #70 from NicheInteractiveMedia/SV/upgrade-post-purchase-donation-api
+    
+    Upgrade the Post-Purchase extension to the latest API
+
+
+Commit ca127f3:
+commit ca127f3e43db099544ac9fe19c9d210ddaef3a15
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Fri Feb 7 14:43:45 2025 +0100
+
+    Correctly set up the SDK client
+
+extensions/checkout-ui-extension/src/index.tsx
+
+Commit 8808825:
+commit 8808825b8aa42f1f7d507fe2eda3093e56ce6cfa
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Thu Feb 6 11:32:06 2025 +0100
+
+    Upgrade the Post-Purchase extension to the latest API
+
+extensions/post-purchase-confirmation/shopify.extension.toml
+
+Commit fdb55b3:
+commit fdb55b3f13fa902a55a1d435f160b60d242b57f4
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 17:58:52 2025 +0100
+
+    Use explicit checks for rendering the extension
+
+extensions/checkout-ui-extension/src/index.tsx
+
+Commit aac11e9:
+commit aac11e99e8b9e99fa23793cf67ca40c7d66e6425
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 17:29:00 2025 +0100
+
+    Use the new Placeholder component to render the loading state.
+
+extensions/checkout-ui-extension/src/components/Placeholder.tsx
+extensions/checkout-ui-extension/src/index.tsx
+
+Commit 2f654f4:
+commit 2f654f43c770a34539d8179f591d0d1cb728cd87
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 09:13:42 2025 +0100
+
+    Bump the version of the theme extension too
+
+extensions/post-purchase-confirmation/shopify.extension.toml
+
+Commit 989b7f5:
+commit 989b7f5223bcdd7b40ff6071dc4a2b5d5d7c686d
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 09:13:02 2025 +0100
+
+    Upgrade the checkout ui extension to one higher version
+
+extensions/checkout-ui-extension/shopify.extension.toml
+
+Commit e77d30e:
+commit e77d30e7a078114ee9024663ee67874eb414bb6b
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 09:09:29 2025 +0100
+
+    Set the correct file rights to download the widget scripts
+
+download-widget-scripts-staging.sh
+
+Commit e77d30e:
+commit e77d30e7a078114ee9024663ee67874eb414bb6b
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 09:09:29 2025 +0100
+
+    Set the correct file rights to download the widget scripts
+
+download-widget-scripts-staging.sh
+
+Commit 8ee8c5a:
+commit 8ee8c5a41453372ef0afdeefca613213c56d3217
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Wed Feb 5 09:04:54 2025 +0100
+
+    Hide the checkout UI extension when the store is inactive
+
+extensions/checkout-ui-extension/src/index.tsx
+
+Commit fb372d4:
+commit fb372d42dcc8607e65c4ba508f2bcfcc0dc4b6f8
+Merge: a912a3b dd17d98
+Author: Stefan Vermaas <stefan@codeture.nl>
+Date:   Mon Jan 27 16:52:51 2025 +0100
+
+    Merge pull request #68 from NicheInteractiveMedia/SV/initial-extension-setup
+    
+    The initial Shopify POS UI extension setup
+
+
+Commit dd17d98:
+commit dd17d9875b81bad9b15a15dcaa641bb397e0cbe6
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Jan 27 16:50:48 2025 +0100
+
+    Scaffolds the POS UI extension
+
+extensions/pos-ui-extension/shopify.extension.toml
+extensions/pos-ui-extension/src/Modal.tsx
+extensions/pos-ui-extension/src/Tile.tsx
+
+Commit bc2a8f5:
+commit bc2a8f5b98f208e52e651e1434d235dcaa654a10
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Jan 27 16:50:23 2025 +0100
+
+    Extend the .gitignore to also ignore the Shopify extension builds.
+
+.gitignore
+
+Commit 8dfae87:
+commit 8dfae87c4819819c27dc7f2d6292aeaede5c1b7d
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Jan 27 16:49:04 2025 +0100
+
+    Configure the shopify.app.toml to use the dev setup
+
+shopify.app.toml
+
+Commit 8bf169c:
+commit 8bf169cd1fd01201f0ba155c14686295b00febb9
+Author: Stefan Vermaas <stefanvermaas@pm.me>
+Date:   Mon Jan 27 16:48:50 2025 +0100
+
+    Ignore all dist folders for every extension.
+
+.gitignore
+
+Commit a912a3b:
+commit a912a3b3486429ca2a8258f71ae38d7d0e7299c6
+Merge: 15f4f23 3229308
+Author: Cesar De Casas <104776589+CsrDeCasas@users.noreply.github.com>
+Date:   Sun Jan 5 15:45:15 2025 -0600
+
+    Merge pull request #67 from NicheInteractiveMedia/MX-5461
+    
+    Mx 5461
+
+
+Commit 3229308:
+commit 3229308dd32a9f25786be25705f796e2d954c758
+Author: Cesar De Casas <cesar@shoppinggives.com>
+Date:   Sun Jan 5 15:44:16 2025 -0600
+
+    scope changes
+
+extensions/checkout-ui-extension/src/components/footer/footer.tsx
+shopify.app.prod.toml
+shopify.app.staging.toml
+
+=== ChangeCommerce.Stores.API ===
+
+Commit 9df77f3:
+commit 9df77f37ba372023d356ce0e300131dc880d26d0
+Merge: c07e502 2ef3bc5
+Author: Ben Zohar <benmzohar@gmail.com>
+Date:   Thu Feb 13 12:06:15 2025 -0600
+
+    Merge pull request #946 from NicheInteractiveMedia/MX-5477-explerience-active-defaults
+    
+    Fixes to ExperienceActive experiences
+
+
+Commit c52e797:
+commit c52e79782053b0cc5cc93f48bfad750402cdc19a
+Merge: ad6085d 2ef3bc5
+Author: Ben Zohar <benmzohar@gmail.com>
+Date:   Wed Feb 12 14:07:05 2025 -0600
+
+    Merge pull request #945 from NicheInteractiveMedia/MX-5477-explerience-active-defaults
+    
+    Mx 5477 experience active defaults
+
+
+Commit 2ef3bc5:
+commit 2ef3bc500decce69c7dbb1259092c6449f2b99d7
+Author: Ben Zohar <benmzohar@gmail.com>
+Date:   Wed Feb 12 14:02:58 2025 -0600
+
+    Fixes to ExperienceActive experiences
+
+src/ChangeCommerce.Stores.API/Controllers/StoreController.cs
+src/ChangeCommerce.Stores.CommandHandlers/SetIsActiveCommandHandler.cs
+src/ChangeCommerce.Stores.Commands/SetIsActiveCommand.cs
+src/ChangeCommerce.Stores.GlobalEventHandlers/SubscriptionsGlobalEventHandler.cs
+src/ChangeCommerce.Stores.GlobalEvents/IsActiveSetEvent.cs
+src/ChangeCommerce.Stores.Models/StoreAggregate.cs
+src/ChangeCommerce.Stores.ReadStore/QueryRepos/StoreChangeCommQuery.cs
+
+=== ChangeCommerce.Utilities.JS ===
+
+Commit 38ee844e:
+commit 38ee844eaa822aee6bd42f5b4b8eceb236d94753
+Merge: 05481f46 f8fcb730
+Author: Ben Zohar <benmzohar@gmail.com>
+Date:   Mon Jan 13 09:31:55 2025 -0600
+
+    Merge pull request #1891 from NicheInteractiveMedia/master
+    
+    Downmerge to S1
+
+
+Commit f8fcb730:
+commit f8fcb7301f93e6db251cb29c4dc606d70ad0aa8a
+Author: Cesar De Casas <cesar@shoppinggives.com>
+Date:   Fri Jan 10 09:26:48 2025 -0600
+
+    Only check allow customer donation if campaign is active
+
+public/addon-test.html
+src/components/shopify/shopify.ts
+src/components/tracking-loader/tracking-loader.ts
+src/widgets/addon/general-addon-widget.ts
+src/widgets/addon/shopify-addon-widget.ts
+src/widgets/roundup/roundup-widget.ts
+
+=== shoppinggives.widget-sdk ===
+commit f216b6631b19306ae70a3005996df5f133405a24
+Author: Cesar De Casas <cesar@shoppinggives.com>
+Date:   Wed Feb 5 08:20:38 2025 -0600
+
+    Latest
+
+lib/core/Base.ts
+package.json

@@ -1,0 +1,8 @@
+Git Commit History for ChangeCommerce.Utilities.JS
+Generated on: 2025-02-17 16:05:06 CST
+
+* f8fcb730 - Cesar De Casas, 5 weeks ago : Only check allow customer donation if campaign is active
+* b2ef254d - Cesar De Casas, 7 weeks ago : Merge pull request #1890 from NicheInteractiveMedia/MX-5461
+* 37b37320 - Cesar De Casas, 7 weeks ago : move ip check
+* cf6f3842 - Cesar De Casas, 7 weeks ago : Merge pull request #1889 from NicheInteractiveMedia/MX-5461
+[... continuing with full history ...]

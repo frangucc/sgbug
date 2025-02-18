@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commits Report 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold text-gray-900">Commits Report</h1>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="#summary" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Summary
+                            </a>
+                            <a href="#commits" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Commits
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Repository Summary -->
+            <section id="summary" class="mb-8">
+                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="px-4 py-5 sm:px-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg leading-6 font-medium text-gray-900">Repository Summary</h2>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-500">Overview of repository activity</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <label for="committer-filter" class="text-sm font-medium text-gray-700">Filter by Committer:</label>
+                                <select id="committer-filter" 
+                                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                        onchange="filterByCommitter(this.value)">
+                                    <option value="">All Committers</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        <div class="bg-white px-4 py-5 sm:p-6">
+                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" id="repoSummary">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Commits Timeline -->
+            <section id="commits" class="mb-8">
+                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="px-4 py-5 sm:px-6">
+                        <h2 class="text-lg leading-6 font-medium text-gray-900">Commits Timeline</h2>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Detailed view of recent commits</p>
+                    </div>
+                    <div class="border-t border-gray-200">
+                        <div class="bg-white">
+                            <ul class="divide-y divide-gray-200" id="commitsList">
+                                <!-- Will be populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Utility functions
+        function getGitHubUrl(repo, type, hash, path) {
+            // All repositories are under NicheInteractiveMedia organization
+            const baseUrl = `https://github.com/NicheInteractiveMedia/${repo}`;
+            
+            switch(type) {
+                case 'commit':
+                    return `${baseUrl}/commit/${hash}`;
+                case 'blob':
+                    return `${baseUrl}/blob/${hash}/${path}`;
+                case 'history':
+                    return `${baseUrl}/commits/${hash}/${path}`;
+                default:
+                    return '#';
+            }
+        }
+
+        function formatFullDate(dateString) {
+            if (!dateString) return 'Unknown Date';
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return dateString;
+                
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            } catch (e) {
+                console.error('Error formatting date:', dateString, e);
+                return dateString;
+            }
+        }
+
+        function formatRelativeTime(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return '';
+                
+                const now = new Date();
+                const diffMs = now - date;
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < 1) return 'Today';
+                if (diffDays === 1) return 'Yesterday';
+                if (diffDays < 7) return `${diffDays} days ago`;
+                if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+                return '';
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function getImpactBadge(impact) {
+            const colors = {
+                'MAJOR': 'bg-red-100 text-red-800',
+                'MODERATE': 'bg-yellow-100 text-yellow-800',
+                'MINOR': 'bg-green-100 text-green-800'
+            };
+            return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[impact] || colors['MINOR']}">
+                ${(impact || 'MINOR').toLowerCase()}
+            </span>`;
+        }
+
+        function getTagBadge(tag) {
+            return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                ${tag}
+            </span>`;
+        }
+
+        function getImpactAreaBadge(area) {
+            return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                ${area}
+            </span>`;
+        }
+
+        let currentFilter = { repo: null, type: null, committer: null };
+        let commitsData = null;
+        let expandedCommits = new Set();
+
+        function filterByCommitter(committer) {
+            currentFilter.committer = committer;
+            renderRepoSummary(commitsData); // Update summary numbers
+            renderCommitsList(commitsData);
+        }
+
+        function filterByRepo(repo, type) {
+            if (currentFilter.repo === repo && currentFilter.type === type) {
+                // Clicking the same filter again clears it
+                currentFilter = { repo: null, type: null };
+                expandedCommits.clear();
+            } else {
+                currentFilter = { repo, type };
+                expandedCommits.clear();
+                
+                // If filtering by files, expand all commits for the repo
+                if (type === 'files') {
+                    commitsData.commits
+                        .filter(c => c.repository === repo)
+                        .forEach(c => expandedCommits.add(c.hash));
+                }
+            }
+            renderCommitsList(commitsData);
+        }
+
+        // Render functions
+        function calculateRepoSummary(commits) {
+            const summary = {};
+            commits.forEach(commit => {
+                if (!summary[commit.repository]) {
+                    summary[commit.repository] = {
+                        name: commit.repository,
+                        commits: 0,
+                        files: 0
+                    };
+                }
+                summary[commit.repository].commits++;
+                summary[commit.repository].files += commit.file_changes?.length || 0;
+            });
+            
+            return Object.values(summary).map(repo => ({
+                name: repo.name,
+                commits: repo.commits,
+                files: repo.files
+            }));
+        }
+
+        function renderRepoSummary(data) {
+            commitsData = data; // Store the data for filtering
+            
+            // Update committer filter options
+            const committers = new Set(data.commits.map(c => c.author));
+            const committerSelect = document.getElementById('committer-filter');
+            committerSelect.innerHTML = '<option value="">All Committers</option>' + 
+                Array.from(committers)
+                    .sort()
+                    .map(author => `<option value="${author}">${author}</option>`)
+                    .join('');
+            
+            // Restore selected committer in dropdown
+            if (currentFilter.committer) {
+                committerSelect.value = currentFilter.committer;
+            }
+
+            // Use original summary data when no committer is selected
+            let summaryData;
+            if (currentFilter.committer) {
+                // Filter commits and calculate summary if committer selected
+                const filteredCommits = data.commits.filter(c => c.author === currentFilter.committer);
+                summaryData = calculateRepoSummary(filteredCommits);
+            } else {
+                // Use original summary data for all committers
+                summaryData = data.repoSummary;
+            }
+            
+            const html = summaryData.map(repo => `
+                <div class="bg-gray-50 px-4 py-5 sm:p-6 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 truncate">${repo.name}</h3>
+                    <dl class="mt-5 grid grid-cols-2 gap-5">
+                        <div class="px-4 py-2">
+                            <dt class="text-sm font-medium text-gray-500">Commits</dt>
+                            <dd class="mt-1 text-3xl font-semibold text-gray-900 cursor-pointer hover:text-blue-600" 
+                                onclick="filterByRepo('${repo.name}', 'commits')">
+                                ${repo.commits}
+                            </dd>
+                        </div>
+                        <div class="px-4 py-2">
+                            <dt class="text-sm font-medium text-gray-500">Files</dt>
+                            <dd class="mt-1 text-3xl font-semibold text-gray-900 cursor-pointer hover:text-blue-600" 
+                                onclick="filterByRepo('${repo.name}', 'files')">
+                                ${repo.files}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            `).join('');
+            document.getElementById('repoSummary').innerHTML = html;
+        }
+
+        function renderCommitsList(data) {
+            let commits = data.commits;
+            
+            // Apply filters if set
+            if (currentFilter.repo) {
+                commits = commits.filter(c => c.repository === currentFilter.repo);
+            }
+            if (currentFilter.committer) {
+                commits = commits.filter(c => c.author === currentFilter.committer);
+            }
+            
+            const html = commits.map(commit => {
+                const fileChanges = commit.files.map(file => {
+                    const changes = file.changes || {};
+                    const tags = changes.tags || [];
+                    const impactAreas = changes.impact_areas || [];
+                    
+                    return `
+                        <div class="mt-4 pl-4">
+                            <div class="flex items-start">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">${file.path}</p>
+                                    ${changes.summary ? `
+                                        <p class="mt-2 text-sm text-gray-500">${changes.summary}</p>
+                                    ` : ''}
+                                    ${tags.length > 0 ? `
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            ${tags.map(getTagBadge).join('')}
+                                        </div>
+                                    ` : ''}
+                                    ${impactAreas.length > 0 ? `
+                                        <div class="mt-2 flex flex-wrap gap-2">
+                                            ${impactAreas.map(getImpactAreaBadge).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <li class="commit-item">
+                        <div class="px-4 py-6 sm:px-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <div class="relative">
+                                            ${getImpactBadge(commit.technical_impact)}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-900">
+                                            <button class="hover:underline focus:outline-none" onclick="toggleCommitDetails('${commit.hash}')">
+                                                ${commit.title || commit.message}
+                                            </button>
+                                        </h3>
+                                        <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                                            <span class="font-medium">${commit.repository}</span>
+                                            <span>&bull;</span>
+                                            <time datetime="${commit.date}">${formatFullDate(commit.date)}</time>
+                                            <span>&bull;</span>
+                                            <span>${commit.author}</span>
+                                            <span>&bull;</span>
+                                            <span>${formatRelativeTime(commit.date)}</span>
+                                            <span>&bull;</span>
+                                            <a href="${getGitHubUrl(commit.repository, 'commit', commit.hash)}" 
+                                               target="_blank"
+                                               class="px-1.5 py-0.5 text-xs font-mono bg-gray-100 rounded hover:bg-gray-200">
+                                                ${commit.hash.substring(0, 7)}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 text-sm text-gray-500">
+                                    <span>${commit.files?.length || 0} files</span>
+                                    ${commit.file_changes.reduce((acc, fc) => acc + (fc.function_changes?.length || 0), 0) > 0 ? `
+                                        <span>&bull;</span>
+                                        <span>${commit.file_changes.reduce((acc, fc) => acc + (fc.function_changes?.length || 0), 0)} functions</span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div class="mt-4 commit-details ${expandedCommits.has(commit.hash) ? '' : 'hidden'}" id="details-${commit.hash}">
+                                ${commit.detailed_description ? `
+                                    <div class="bg-gray-50 rounded-lg px-4 py-3 mt-3">
+                                        <p class="text-sm text-gray-700">${commit.detailed_description}</p>
+                                    </div>
+                                ` : ''}
+                                <div class="mt-4 space-y-4">
+                                    ${commit.file_changes.map(change => `
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex-1">
+                                                    <a href="${getGitHubUrl(commit.repository, 'blob', commit.hash, change.file_path)}" 
+                                                       target="_blank"
+                                                       class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                                                        ${change.file_path}
+                                                    </a>
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <a href="${getGitHubUrl(commit.repository, 'history', commit.hash, change.file_path)}" 
+                                                       target="_blank"
+                                                       class="text-xs text-gray-500 hover:text-gray-700 hover:underline">
+                                                        History
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            ${change.change_summary ? `
+                                                <p class="mt-2 text-sm text-gray-600">${change.change_summary}</p>
+                                            ` : ''}
+                                            ${change.tags.length > 0 ? `
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    ${change.tags.map(tag => `
+                                                        <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                                            ${tag}
+                                                        </span>
+                                                    `).join('')}
+                                                </div>
+                                            ` : ''}
+                                            ${change.impact_areas.length > 0 ? `
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    ${change.impact_areas.map(area => `
+                                                        <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                                                            ${area}
+                                                        </span>
+                                                    `).join('')}
+                                                </div>
+                                            ` : ''}
+                                            ${change.function_changes.length > 0 ? `
+                                                <div class="mt-3 border-t border-gray-200 pt-3">
+                                                    <h4 class="text-xs font-medium text-gray-500 mb-2">Function Changes</h4>
+                                                    <div class="space-y-2">
+                                                        ${change.function_changes.map(fc => `
+                                                            <div class="text-sm">
+                                                                <span class="font-mono text-gray-700">${fc.name}</span>
+                                                                <span class="ml-2 px-1.5 py-0.5 text-xs rounded ${fc.type === 'ADDED' ? 'bg-green-100 text-green-800' : fc.type === 'REMOVED' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}">
+                                                                    ${fc.type.toLowerCase()}
+                                                                </span>
+                                                                ${fc.description ? `
+                                                                    <p class="mt-1 text-xs text-gray-600 ml-4">${fc.description}</p>
+                                                                ` : ''}
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+            document.getElementById('commitsList').innerHTML = html;
+        }
+
+        function toggleCommitDetails(hash) {
+            const details = document.getElementById(`details-${hash}`);
+            if (details) {
+                details.classList.toggle('hidden');
+            }
+        }
+
+        // Load and render data
+        async function loadData() {
+            try {
+                const response = await fetch('commits_data.json');
+                const data = await response.json();
+                renderRepoSummary(data);
+                renderCommitsList(data);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

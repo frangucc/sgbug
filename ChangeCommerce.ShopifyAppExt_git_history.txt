@@ -1,0 +1,10 @@
+Git Commit History for ChangeCommerce.ShopifyAppExt
+Generated on: 2025-02-17 16:05:06 CST
+
+* 79a25d7 - Stefan Vermaas, 6 days ago : Merge pull request #69 from NicheInteractiveMedia/SV/fix-checkout-ui-extension-rendering
+* 1200f23 - Stefan Vermaas, 7 days ago : Use the vendored JS SDK
+* 61dca93 - Stefan Vermaas, 7 days ago : Format the vendored SDK
+* eb36339 - Stefan Vermaas, 7 days ago : Use a vendored version of the SDK for the checkout UI extension
+* 22f0003 - Stefan Vermaas, 10 days ago : Merge pull request #70 from NicheInteractiveMedia/SV/upgrade-post-purchase-donation-api
+* 8808825 - Stefan Vermaas, 12 days ago : Upgrade the Post-Purchase extension to the latest API
+[... continuing with full history ...]

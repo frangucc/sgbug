@@ -1,0 +1,121 @@
+=== File Changes Summary ===
+
+=== ChangeCommerce.Products.API ===
+
+9e06f42 - Ben Zohar, Thu Jan 23 15:46:56 2025 -0600 : edgecase fix for first page ignoring first product.
+
+ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs
+
+=== ChangeCommerce.ShopifyAppExt ===
+
+79a25d7 - Stefan Vermaas, Tue Feb 11 17:46:41 2025 +0100 : Merge pull request #69 from NicheInteractiveMedia/SV/fix-checkout-ui-extension-rendering
+
+1200f23 - Stefan Vermaas, Mon Feb 10 20:46:44 2025 +0100 : Use the vendored JS SDK
+
+extensions/checkout-ui-extension/src/index.tsx
+
+61dca93 - Stefan Vermaas, Mon Feb 10 20:46:27 2025 +0100 : Format the vendored SDK
+
+extensions/checkout-ui-extension/vendor/shopping-gives.js
+
+eb36339 - Stefan Vermaas, Mon Feb 10 20:41:01 2025 +0100 : Use a vendored version of the SDK for the checkout UI extension
+
+extensions/checkout-ui-extension/src/index.tsx
+extensions/checkout-ui-extension/vendor/shopping-gives.js
+
+bf1d5df - Stefan Vermaas, Sun Feb 9 19:28:57 2025 +0100 : Merge branch 'master' into SV/fix-checkout-ui-extension-rendering
+
+22f0003 - Stefan Vermaas, Fri Feb 7 14:45:41 2025 +0100 : Merge pull request #70 from NicheInteractiveMedia/SV/upgrade-post-purchase-donation-api
+
+ca127f3 - Stefan Vermaas, Fri Feb 7 14:43:45 2025 +0100 : Correctly set up the SDK client
+
+extensions/checkout-ui-extension/src/index.tsx
+
+8808825 - Stefan Vermaas, Thu Feb 6 11:32:06 2025 +0100 : Upgrade the Post-Purchase extension to the latest API
+
+extensions/post-purchase-confirmation/shopify.extension.toml
+
+fdb55b3 - Stefan Vermaas, Wed Feb 5 17:58:52 2025 +0100 : Use explicit checks for rendering the extension
+
+extensions/checkout-ui-extension/src/index.tsx
+
+aac11e9 - Stefan Vermaas, Wed Feb 5 17:29:00 2025 +0100 : Use the new Placeholder component to render the loading state.
+
+extensions/checkout-ui-extension/src/components/Placeholder.tsx
+extensions/checkout-ui-extension/src/index.tsx
+
+2f654f4 - Stefan Vermaas, Wed Feb 5 09:13:42 2025 +0100 : Bump the version of the theme extension too
+
+extensions/post-purchase-confirmation/shopify.extension.toml
+
+989b7f5 - Stefan Vermaas, Wed Feb 5 09:13:02 2025 +0100 : Upgrade the checkout ui extension to one higher version
+
+extensions/checkout-ui-extension/shopify.extension.toml
+
+e77d30e - Stefan Vermaas, Wed Feb 5 09:09:29 2025 +0100 : Set the correct file rights to download the widget scripts
+
+download-widget-scripts-staging.sh
+
+8ee8c5a - Stefan Vermaas, Wed Feb 5 09:04:54 2025 +0100 : Hide the checkout UI extension when the store is inactive
+
+extensions/checkout-ui-extension/src/index.tsx
+
+fb372d4 - Stefan Vermaas, Mon Jan 27 16:52:51 2025 +0100 : Merge pull request #68 from NicheInteractiveMedia/SV/initial-extension-setup
+
+dd17d98 - Stefan Vermaas, Mon Jan 27 16:50:48 2025 +0100 : Scaffolds the POS UI extension
+
+extensions/pos-ui-extension/shopify.extension.toml
+extensions/pos-ui-extension/src/Modal.tsx
+extensions/pos-ui-extension/src/Tile.tsx
+
+bc2a8f5 - Stefan Vermaas, Mon Jan 27 16:50:23 2025 +0100 : Extend the .gitignore to also ignore the Shopify extension builds.
+
+.gitignore
+
+8dfae87 - Stefan Vermaas, Mon Jan 27 16:49:04 2025 +0100 : Configure the shopify.app.toml to use the dev setup
+
+shopify.app.toml
+
+8bf169c - Stefan Vermaas, Mon Jan 27 16:48:50 2025 +0100 : Ignore all dist folders for every extension.
+
+.gitignore
+
+a912a3b - Cesar De Casas, Sun Jan 5 15:45:15 2025 -0600 : Merge pull request #67 from NicheInteractiveMedia/MX-5461
+
+3229308 - Cesar De Casas, Sun Jan 5 15:44:16 2025 -0600 : scope changes
+
+extensions/checkout-ui-extension/src/components/footer/footer.tsx
+shopify.app.prod.toml
+shopify.app.staging.toml
+
+=== ChangeCommerce.Stores.API ===
+
+9df77f3 - Ben Zohar, Thu Feb 13 12:06:15 2025 -0600 : Merge pull request #946 from NicheInteractiveMedia/MX-5477-explerience-active-defaults
+
+2ef3bc5 - Ben Zohar, Wed Feb 12 14:02:58 2025 -0600 : Fixes to ExperienceActive experiences
+
+src/ChangeCommerce.Stores.API/Controllers/StoreController.cs
+src/ChangeCommerce.Stores.CommandHandlers/SetIsActiveCommandHandler.cs
+src/ChangeCommerce.Stores.Commands/SetIsActiveCommand.cs
+src/ChangeCommerce.Stores.GlobalEventHandlers/SubscriptionsGlobalEventHandler.cs
+src/ChangeCommerce.Stores.GlobalEvents/IsActiveSetEvent.cs
+src/ChangeCommerce.Stores.Models/StoreAggregate.cs
+src/ChangeCommerce.Stores.ReadStore/QueryRepos/StoreChangeCommQuery.cs
+
+=== ChangeCommerce.Utilities.JS ===
+
+f8fcb730 - Cesar De Casas, Fri Jan 10 09:26:48 2025 -0600 : Only check allow customer donation if campaign is active
+
+public/addon-test.html
+src/components/shopify/shopify.ts
+src/components/tracking-loader/tracking-loader.ts
+src/widgets/addon/general-addon-widget.ts
+src/widgets/addon/shopify-addon-widget.ts
+src/widgets/roundup/roundup-widget.ts
+
+=== shoppinggives.widget-sdk ===
+
+f216b66 - Cesar De Casas, Wed Feb 5 08:20:38 2025 -0600 : Latest
+
+lib/core/Base.ts
+package.json

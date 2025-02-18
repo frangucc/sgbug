@@ -1,0 +1,11 @@
+Git Commit History for shoppinggives.widget-sdk
+Generated on: 2025-02-17 16:05:06 CST
+
+* 804180a - Cesar De Casas, 7 months ago : Merge pull request #4 from NicheInteractiveMedia/sdk-multicurrency
+* a2fdfb8 - Cesar De Casas, 7 months ago : increase version
+* 805e389 - Cesar De Casas, 7 months ago : Merge pull request #3 from NicheInteractiveMedia/sdk-multicurrency
+* 2a720a2 - Cesar De Casas, 7 months ago : make currency code upper case
+* ecc8f72 - Cesar De Casas, 7 months ago : changes for multicurrency
+* de3dc6f - Paul, 1 year, 4 months ago : Merge pull request #1 from NicheInteractiveMedia/MX-4103-Update-Endpoints
+* 078954d - Paul, 1 year, 4 months ago : fix: append missing headers
+* e83baad - Paul, 1 year, 4 months ago : init

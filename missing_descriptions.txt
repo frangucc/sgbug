@@ -1,0 +1,91 @@
+Commits Missing Descriptions
+==========================
+
+ChangeCommerce.ShopifyAppExt:
+----------------------------
+1. Commit: 2f654f4
+   Message: Bump the version of the theme extension too
+   Files:
+   - extensions/post-purchase-confirmation/shopify.extension.toml
+
+2. Commit: 3229308
+   Message: scope changes
+   Files:
+   - extensions/checkout-ui-extension/src/components/footer/footer.tsx
+   - shopify.app.prod.toml
+   - shopify.app.staging.toml
+
+3. Commit: 61dca93
+   Message: Format the vendored SDK
+   Files:
+   - extensions/checkout-ui-extension/vendor/shopping-gives.js
+
+4. Commit: 8bf169c
+   Message: Ignore all dist folders for every extension
+   Files:
+   - .gitignore
+
+5. Commit: 8dfae87
+   Message: Configure the shopify.app.toml to use the dev setup
+   Files:
+   - shopify.app.toml
+
+6. Commit: 8ee8c5a
+   Message: Hide the checkout UI extension when the store is inactive
+   Files:
+   - extensions/checkout-ui-extension/src/index.tsx
+
+7. Commit: 989b7f5
+   Message: Upgrade the checkout ui extension to one higher version
+   Files:
+   - extensions/checkout-ui-extension/shopify.extension.toml
+
+8. Commit: bc2a8f5
+   Message: Extend the .gitignore to also ignore the Shopify extension builds
+   Files:
+   - .gitignore
+
+9. Commit: dd17d98
+   Message: Scaffolds the POS UI extension
+   Files:
+   - extensions/pos-ui-extension/shopify.extension.toml
+   - extensions/pos-ui-extension/src/Tile.tsx
+
+10. Commit: e77d30e
+    Message: Set the correct file rights to download the widget scripts
+    Files:
+    - download-widget-scripts-staging.sh
+
+11. Commit: eb36339
+    Message: Use a vendored version of the SDK for the checkout UI extension
+    Files:
+    - extensions/checkout-ui-extension/src/index.tsx
+
+12. Commit: fdb55b3
+    Message: Use explicit checks for rendering the extension
+    Files:
+    - extensions/checkout-ui-extension/src/index.tsx
+
+ChangeCommerce.Utilities.JS:
+---------------------------
+13. Commit: f8fcb730
+    Message: Only check allow customer donation if campaign is active
+    Files:
+    - public/addon-test.html
+    - src/components/shopify/shopify.ts
+    - src/widgets/addon/general-addon-widget.ts
+    - src/widgets/addon/shopify-addon-widget.ts
+    - src/widgets/roundup/roundup-widget.ts
+
+shoppinggives.widget-sdk:
+------------------------
+14. Commit: f216b66
+    Message: Latest
+    Files:
+    - package.json
+
+Shall we start with any particular commit to add its description? For each commit, I can:
+1. Show the actual git diff
+2. Analyze the changes
+3. Propose a detailed description with tags and impact areas
+4. Add it to our database after your approval

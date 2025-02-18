@@ -1,0 +1,80 @@
+=== ChangeCommerce.Products.API ===
+9e06f42 - Ben Zohar, Thu Jan 23 15:46:56 2025 -0600 : edgecase fix for first page ignoring first product.
+
+=== ChangeCommerce.ShopifyAppExt ===
+e87d78e - Stefan Vermaas, Mon Feb 17 17:25:06 2025 +0100 : Merge pull request #79 from NicheInteractiveMedia/SV/show-cause-details
+3e6fdb4 - Stefan Vermaas, Mon Feb 17 16:58:44 2025 +0100 : Alter the current cause to navigate to the cause itself.
+17ae5a8 - Stefan Vermaas, Mon Feb 17 16:58:29 2025 +0100 : Adds the new screen to show the current cause
+c7e93e8 - Stefan Vermaas, Mon Feb 17 16:17:12 2025 +0100 : Merge pull request #78 from NicheInteractiveMedia/SV/add-on-donation-by-customer
+5d6bb04 - Stefan Vermaas, Mon Feb 17 16:09:56 2025 +0100 : Adds the ability for customers to add their own donations too.
+0f99e7f - Stefan Vermaas, Mon Feb 17 16:09:44 2025 +0100 : Adds a native groupBy because Shopify POS doesn't have access to Object.groupBy
+7a2db7f - Stefan Vermaas, Mon Feb 17 16:09:25 2025 +0100 : Extend the types for the add-ons information
+28015b3 - Stefan Vermaas, Mon Feb 17 16:09:08 2025 +0100 : Properly assign the CMSMetaData in the SDK.
+e83a551 - Stefan Vermaas, Mon Feb 17 12:43:08 2025 +0100 : Merge pull request #77 from NicheInteractiveMedia/SV/select-a-cause
+cf18d59 - Stefan Vermaas, Mon Feb 17 12:42:38 2025 +0100 : Remove the LoadingIndicator component
+ca3ad10 - Stefan Vermaas, Mon Feb 17 12:31:54 2025 +0100 : Adds the ability to change the cause
+9f719c1 - Stefan Vermaas, Mon Feb 17 12:31:45 2025 +0100 : Correctly set the return value of the cause's headline
+681e0da - Stefan Vermaas, Mon Feb 17 12:31:26 2025 +0100 : Conditionally show/hide the option to select a cause.
+5da03f9 - Stefan Vermaas, Mon Feb 17 12:30:55 2025 +0100 : Default to an empty string when the headline is missing and use a smaller logo
+55e5a13 - Stefan Vermaas, Mon Feb 17 12:30:19 2025 +0100 : Expose all causes through the useCause hook
+5ef10c4 - Stefan Vermaas, Mon Feb 17 11:31:45 2025 +0100 : Create a new CauseSection component and a placeholder for the CauseSelector
+c338495 - Stefan Vermaas, Mon Feb 17 11:25:25 2025 +0100 : Correct the types and use the CauseProvider in the ActiveCause.
+df0888f - Stefan Vermaas, Mon Feb 17 11:25:11 2025 +0100 : Standardize a loading indicator
+f2bde29 - Stefan Vermaas, Mon Feb 17 11:24:51 2025 +0100 : Include the new CauseProvider in the modal (only there)
+5cfc1fa - Stefan Vermaas, Mon Feb 17 11:24:22 2025 +0100 : Create a CauseProvider component to manage the state of the cause
+8088702 - Stefan Vermaas, Mon Feb 17 11:01:15 2025 +0100 : Merge pull request #76 from NicheInteractiveMedia/SV/rename-tile-and-modal
+a1787e7 - Stefan Vermaas, Mon Feb 17 10:59:35 2025 +0100 : Use a consistent setup for the modal and tile
+0e79aa0 - Stefan Vermaas, Mon Feb 17 10:54:45 2025 +0100 : Use the prefix Extension for the main entrypoints: Modal and Tile
+117c5a4 - Stefan Vermaas, Mon Feb 17 10:52:29 2025 +0100 : Merge pull request #75 from NicheInteractiveMedia/SV/rename-store-to-session
+c134e52 - Stefan Vermaas, Mon Feb 17 10:50:59 2025 +0100 : Remove the unused types for more explicit type names
+c4128c0 - Stefan Vermaas, Mon Feb 17 10:50:01 2025 +0100 : Rename the CartProvider to SessionProvider
+76a9594 - Stefan Vermaas, Thu Feb 13 19:15:17 2025 +0100 : Merge pull request #74 from NicheInteractiveMedia/SV/detect-store-configuration
+71a9f7c - Stefan Vermaas, Thu Feb 13 19:07:45 2025 +0100 : Fetch the store ID from the API
+d088687 - Stefan Vermaas, Mon Feb 10 16:54:36 2025 +0100 : Format the active cause properly
+f273eff - Stefan Vermaas, Mon Feb 10 16:41:07 2025 +0100 : Renders the active cause
+c66662c - Stefan Vermaas, Mon Feb 10 16:40:55 2025 +0100 : Expose the cart data and client through the CartProvider
+eeacf9f - Stefan Vermaas, Mon Feb 10 16:40:30 2025 +0100 : Export all relevant types to the app
+75def5d - Stefan Vermaas, Mon Feb 10 16:40:16 2025 +0100 : Adds a component to display text that is too long to be displayed.
+a882655 - Stefan Vermaas, Mon Feb 10 16:33:18 2025 +0100 : Remove the outdated WidgetProvider
+d690ba1 - Stefan Vermaas, Mon Feb 10 12:55:11 2025 +0100 : Use the most recent version of the Shopping Gives SDK
+659f34f - Stefan Vermaas, Mon Feb 10 12:54:56 2025 +0100 : Use the dev shopify.app.toml of Codeture
+a4404de - Stefan Vermaas, Mon Feb 10 12:54:37 2025 +0100 : Disable the ESLint and Prettier configuration as they're not accessible.
+d5d8087 - Stefan Vermaas, Thu Feb 6 14:52:05 2025 +0100 : Adds the CartProvider that initialized the cart for the app
+51e2a6b - Stefan Vermaas, Thu Feb 6 14:10:29 2025 +0100 : Add a StoreProvider to gather the details about the store.
+c3019b1 - Stefan Vermaas, Thu Feb 6 12:36:19 2025 +0100 : Add a CacheProvider to solve the caching issue
+d6eddc5 - Stefan Vermaas, Tue Feb 4 16:42:36 2025 +0100 : Correctly reference the WidgetTile and WidgetProvider
+566d6c9 - Stefan Vermaas, Tue Feb 4 13:26:21 2025 +0100 : Moved the component files into the src directory
+dccc640 - Stefan Vermaas, Tue Feb 4 13:24:16 2025 +0100 : Enable Tile after fetching the store's configuration and checking its status.
+79a25d7 - Stefan Vermaas, Tue Feb 11 17:46:41 2025 +0100 : Merge pull request #69 from NicheInteractiveMedia/SV/fix-checkout-ui-extension-rendering
+1200f23 - Stefan Vermaas, Mon Feb 10 20:46:44 2025 +0100 : Use the vendored JS SDK
+61dca93 - Stefan Vermaas, Mon Feb 10 20:46:27 2025 +0100 : Format the vendored SDK
+eb36339 - Stefan Vermaas, Mon Feb 10 20:41:01 2025 +0100 : Use a vendored version of the SDK for the checkout UI extension
+bf1d5df - Stefan Vermaas, Sun Feb 9 19:28:57 2025 +0100 : Merge branch 'master' into SV/fix-checkout-ui-extension-rendering
+22f0003 - Stefan Vermaas, Fri Feb 7 14:45:41 2025 +0100 : Merge pull request #70 from NicheInteractiveMedia/SV/upgrade-post-purchase-donation-api
+ca127f3 - Stefan Vermaas, Fri Feb 7 14:43:45 2025 +0100 : Correctly set up the SDK client
+8808825 - Stefan Vermaas, Thu Feb 6 11:32:06 2025 +0100 : Upgrade the Post-Purchase extension to the latest API
+fdb55b3 - Stefan Vermaas, Wed Feb 5 17:58:52 2025 +0100 : Use explicit checks for rendering the extension
+aac11e9 - Stefan Vermaas, Wed Feb 5 17:29:00 2025 +0100 : Use the new Placeholder component to render the loading state.
+2f654f4 - Stefan Vermaas, Wed Feb 5 09:13:42 2025 +0100 : Bump the version of the theme extension too
+989b7f5 - Stefan Vermaas, Wed Feb 5 09:13:02 2025 +0100 : Upgrade the checkout ui extension to one higher version
+e77d30e - Stefan Vermaas, Wed Feb 5 09:09:29 2025 +0100 : Set the correct file rights to download the widget scripts
+8ee8c5a - Stefan Vermaas, Wed Feb 5 09:04:54 2025 +0100 : Hide the checkout UI extension when the store is inactive
+fb372d4 - Stefan Vermaas, Mon Jan 27 16:52:51 2025 +0100 : Merge pull request #68 from NicheInteractiveMedia/SV/initial-extension-setup
+dd17d98 - Stefan Vermaas, Mon Jan 27 16:50:48 2025 +0100 : Scaffolds the POS UI extension
+bc2a8f5 - Stefan Vermaas, Mon Jan 27 16:50:23 2025 +0100 : Extend the .gitignore to also ignore the Shopify extension builds.
+8dfae87 - Stefan Vermaas, Mon Jan 27 16:49:04 2025 +0100 : Configure the shopify.app.toml to use the dev setup
+8bf169c - Stefan Vermaas, Mon Jan 27 16:48:50 2025 +0100 : Ignore all dist folders for every extension.
+a912a3b - Cesar De Casas, Sun Jan 5 15:45:15 2025 -0600 : Merge pull request #67 from NicheInteractiveMedia/MX-5461
+3229308 - Cesar De Casas, Sun Jan 5 15:44:16 2025 -0600 : scope changes
+
+=== ChangeCommerce.Stores.API ===
+9df77f3 - Ben Zohar, Thu Feb 13 12:06:15 2025 -0600 : Merge pull request #946 from NicheInteractiveMedia/MX-5477-explerience-active-defaults
+c52e797 - Ben Zohar, Wed Feb 12 14:07:05 2025 -0600 : Merge pull request #945 from NicheInteractiveMedia/MX-5477-explerience-active-defaults
+2ef3bc5 - Ben Zohar, Wed Feb 12 14:02:58 2025 -0600 : Fixes to ExperienceActive experiences
+
+=== ChangeCommerce.Utilities.JS ===
+38ee844e - Ben Zohar, Mon Jan 13 09:31:55 2025 -0600 : Merge pull request #1891 from NicheInteractiveMedia/master
+f8fcb730 - Cesar De Casas, Fri Jan 10 09:26:48 2025 -0600 : Only check allow customer donation if campaign is active
+
+=== shoppinggives.widget-sdk ===
+f216b66 - Cesar De Casas, Wed Feb 5 08:20:38 2025 -0600 : Latest

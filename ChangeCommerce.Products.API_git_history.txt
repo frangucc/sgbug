@@ -1,0 +1,16 @@
+Git Commit History for ChangeCommerce.Products.API
+Generated on: 2025-02-17 16:04:21 CST
+
+* 9e06f42 - Ben Zohar, 4 weeks ago : edgecase fix for first page ignoring first product.
+* ee4b62d - Cesar De Casas, 5 months ago : added missing mock implementation
+* b6a3266 - Cesar De Casas, 5 months ago : Merge pull request #680 from NicheInteractiveMedia/MX-5458
+* e641df7 - Cesar De Casas, 5 months ago : camel case payload
+* 66573cd - Cesar De Casas, 5 months ago : added setting confirmation on calculation call
+* e499905 - Cesar De Casas, 5 months ago : add portfolios when campaigns are inactive
+* 7500286 - Elvan Gaunder, 6 months ago : Merge pull request #679 from NicheInteractiveMedia/MX-5440-default-client-price-for-donation-calculation
+* 59c2e15 - Elvan Gaunder, 6 months ago : feat(calculations) update donation calculations - update default value for realPrice to be null
+* 045ad56 - Elvan Gaunder, 6 months ago : refactor(calculationController) fix variable typo
+* ddfa1d3 - Elvan Gaunder, 6 months ago : feat(build) add vscode launch files
+* 9cea071 - Elvan Gaunder, 6 months ago : fix(calculations) prioritize client provided price over database
+
+[... and continuing with the rest of the history ...]

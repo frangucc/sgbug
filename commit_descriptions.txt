@@ -1,0 +1,63 @@
+=== ChangeCommerce.Products.API ===
+
+Commit: 9e06f42 (Jan 23, 2025)
+Title: Edge Case Fix for First Page Product Handling
+Description:
+Fixed a critical issue in the BulkVariantRepo where the first product on the first page was being ignored during query execution. This was affecting product listings and potentially impacting store performance. The fix ensures proper handling of all products, particularly the first item in paginated results.
+
+=== ChangeCommerce.ShopifyAppExt ===
+
+Commit: e87d78e (Feb 17, 2025)
+Title: Display Cause Details Enhancement
+Description:
+Major UI/UX improvement allowing users to view detailed information about selected causes. Added a new screen component to show comprehensive cause information, including description, impact metrics, and related statistics. Enhanced navigation to make cause details directly accessible from the current cause display.
+
+Commit: 3e6fdb4 (Feb 17, 2025)
+Title: Cause Navigation Implementation
+Description:
+Implemented direct navigation to cause details from the active cause display. Modified the ActiveCause component to be interactive and added proper routing logic. Enhanced the Modal component to support the new navigation flow.
+
+Commit: 17ae5a8 (Feb 17, 2025)
+Title: New Cause Details Screen
+Description:
+Created a new ShowCause screen component that provides a detailed view of the currently selected cause. Includes comprehensive information about the cause's mission, impact, and donation statistics. Implements responsive design patterns for optimal viewing across devices.
+
+Commit: 5d6bb04 (Feb 17, 2025)
+Title: Customer Self-Donation Feature
+Description:
+Major feature addition enabling customers to specify their own donation amounts. Added new UI components in the AddOnSection for custom donation input. Updated the Overview screen to handle custom donation logic. Includes validation and formatting for customer-specified amounts.
+
+=== ChangeCommerce.Stores.API ===
+
+Commit: 2ef3bc5 (Feb 12, 2025)
+Title: Experience Active State Management Update
+Description:
+Significant refactoring of how store active states are managed. Changed the relationship between IsActive and IsExperienceActive flags to be more intuitive. Updated multiple components:
+- Modified StoreController to handle state transitions
+- Updated SetIsActiveCommandHandler with new logic
+- Removed redundant IsExperienceActive property
+- Enhanced SubscriptionsGlobalEventHandler for better state management
+- Added proper cascading of active states
+
+=== ChangeCommerce.Utilities.JS ===
+
+Commit: f8fcb730 (Jan 10, 2025)
+Title: Customer Donation Campaign Check Optimization
+Description:
+Improved the logic for checking customer donation eligibility. Modified multiple components to ensure donation checks only occur for active campaigns:
+- Updated tracking loader to be campaign-aware
+- Enhanced widget initialization process
+- Modified addon and roundup widgets to respect campaign status
+- Added additional validation in the Shopify integration
+
+=== shoppinggives.widget-sdk ===
+
+Commit: f216b66 (Feb 5, 2025)
+Title: SDK Core Updates
+Description:
+Comprehensive update to the SDK's core functionality:
+- Enhanced tracking persistence with improved session storage handling
+- Added new tracking data validation
+- Updated Base class with improved error handling
+- Added support for multiple tracking scenarios
+- Improved type safety throughout the codebase
