@@ -85,21 +85,19 @@
     <script>
         // Utility functions
         function getGitHubUrl(repo, type, hash, path) {
-            const baseUrl = `https://github.com/${repo}`;
+            // Add organization prefix if not present
+            const fullRepo = repo.includes('/') ? repo : `NicheInteractiveMedia/${repo}`;
+            const baseUrl = `https://github.com/${fullRepo}`;
             
             switch(type) {
                 case 'commit':
                     return `${baseUrl}/commit/${hash}`;
                 case 'blob':
-                    return `${baseUrl}/blob/${hash}/${path}`;
+                    return `${baseUrl}/blob/${hash.substring(0, 7)}/${path}`;
                 case 'history':
-                    return `${baseUrl}/commits/main/${path}`;
+                    return `${baseUrl}/blame/main/${path}`;
                 default:
                     return baseUrl;
-            }ry':
-                    return `${baseUrl}/commits/${hash}/${path}`;
-                default:
-                    return '#';
             }
         }
 
@@ -375,11 +373,14 @@
                 if (currentFilter.repo && commit.repository !== currentFilter.repo) return;
                 
                 let shouldExpand = false;
-                commit.file_changes.forEach(change => {
-                    if (currentFilter.tag && change.tags.some(tag => tag.toLowerCase() === currentFilter.tag.toLowerCase())) {
+                (commit.file_changes || []).forEach(change => {
+                    const tags = change.tags ? (typeof change.tags === 'string' ? JSON.parse(change.tags) : change.tags) : [];
+                    const impactAreas = change.impact_areas ? (typeof change.impact_areas === 'string' ? JSON.parse(change.impact_areas) : change.impact_areas) : [];
+                    
+                    if (currentFilter.tag && tags.some(tag => tag.toLowerCase() === currentFilter.tag.toLowerCase())) {
                         shouldExpand = true;
                     }
-                    if (currentFilter.impactArea && change.impact_areas.some(area => area.toLowerCase() === currentFilter.impactArea.toLowerCase())) {
+                    if (currentFilter.impactArea && impactAreas.some(area => area.toLowerCase() === currentFilter.impactArea.toLowerCase())) {
                         shouldExpand = true;
                     }
                 });
@@ -391,47 +392,65 @@
         }
 
         function renderCommitsList(data) {
-            let commits = data.commits;
-            let timeline = data.fileTimeline;
+            // Remove duplicate commits by hash
+            let commits = data.commits.filter((commit, index, self) => 
+                index === self.findIndex((c) => c.hash === commit.hash)
+            );
             
             // Apply filters if set
             if (currentFilter.repo) {
                 commits = commits.filter(c => c.repository === currentFilter.repo);
-                timeline = timeline.filter(c => c.repository === currentFilter.repo);
             }
             if (currentFilter.committer) {
                 commits = commits.filter(c => c.author === currentFilter.committer);
-                timeline = timeline.filter(c => c.author === currentFilter.committer);
             }
             
             const html = commits.map(commit => {
-                const fileChanges = commit.file_changes.map(file => {
-                    const hasMatchingTag = currentFilter.tag && file.tags?.some(tag => tag.toLowerCase() === currentFilter.tag.toLowerCase());
-                    const hasMatchingImpactArea = currentFilter.impactArea && file.impact_areas?.some(area => area.toLowerCase() === currentFilter.impactArea.toLowerCase());
+                const isExpanded = expandedCommits.has(commit.hash);
+                const fileChanges = commit.files.map(filePath => {
+                    const fileChange = (commit.file_changes || []).find(f => f.file_path === filePath);
+                    const tags = fileChange?.tags ? (typeof fileChange.tags === 'string' ? JSON.parse(fileChange.tags) : fileChange.tags) : [];
+                    const impactAreas = fileChange?.impact_areas ? (typeof fileChange.impact_areas === 'string' ? JSON.parse(fileChange.impact_areas) : fileChange.impact_areas) : [];
+                    
+                    const hasMatchingTag = currentFilter.tag && tags.some(tag => tag.toLowerCase() === currentFilter.tag.toLowerCase());
+                    const hasMatchingImpactArea = currentFilter.impactArea && impactAreas.some(area => area.toLowerCase() === currentFilter.impactArea.toLowerCase());
                     
                     return `
                         <div class="mt-4 px-4 py-2 ${(hasMatchingTag || hasMatchingImpactArea) ? 'bg-blue-50' : ''}">
                             <div class="flex items-start">
                                 <div class="min-w-0 flex-1">
-                                    <p class="text-sm font-medium text-gray-900">${file.file_path}</p>
-                                    ${file.change_summary ? `
-                                        <p class="mt-2 text-sm text-gray-500">${file.change_summary}</p>
+                                    <p class="text-sm text-gray-900 font-mono">
+                                        ${filePath}
+                                    </p>
+                                    <div class="text-sm text-gray-500 mt-1 space-x-3">
+                                        <a href="${getGitHubUrl(commit.repository, 'blob', commit.hash, filePath)}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                            View file
+                                        </a>
+                                        <span>&bull;</span>
+                                        <a href="${getGitHubUrl(commit.repository, 'history', commit.hash, filePath)}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                            View blame
+                                        </a>
+                                    </div>
+                                    ${fileChange?.change_summary ? `
+                                        <p class="mt-2 text-sm text-gray-500">${fileChange.change_summary}</p>
                                     ` : ''}
-                                    ${file.tags?.length > 0 ? `
+                                    ${tags.length > 0 ? `
                                         <div class="mt-2 flex flex-wrap gap-2">
-                                            ${file.tags.map(tag => `
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${currentFilter.tag && currentFilter.tag.toLowerCase() === tag.toLowerCase() ? 'bg-blue-200 text-blue-900' : 'bg-blue-100 text-blue-800'}">
+                                            ${tags.map(tag => `
+                                                <button onclick="filterByTag('${tag}', '${commit.repository}')" 
+                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${currentFilter.tag && currentFilter.tag.toLowerCase() === tag.toLowerCase() ? 'bg-blue-200 text-blue-900' : 'bg-blue-100 text-blue-800 hover:bg-blue-200'}">
                                                     ${tag}
-                                                </span>
+                                                </button>
                                             `).join('')}
                                         </div>
                                     ` : ''}
-                                    ${file.impact_areas?.length > 0 ? `
+                                    ${impactAreas.length > 0 ? `
                                         <div class="mt-2 flex flex-wrap gap-2">
-                                            ${file.impact_areas.map(area => `
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${currentFilter.impactArea && currentFilter.impactArea.toLowerCase() === area.toLowerCase() ? 'bg-purple-200 text-purple-900' : 'bg-purple-100 text-purple-800'}">
+                                            ${impactAreas.map(area => `
+                                                <button onclick="filterByImpactArea('${area}', '${commit.repository}')" 
+                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${currentFilter.impactArea && currentFilter.impactArea.toLowerCase() === area.toLowerCase() ? 'bg-purple-200 text-purple-900' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'}">
                                                     ${area}
-                                                </span>
+                                                </button>
                                             `).join('')}
                                         </div>
                                     ` : ''}
@@ -442,76 +461,67 @@
                 }).join('');
 
                 return `
-                    <li class="commit-item">
-                        <div class="px-4 py-6 sm:px-6">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0">
-                                        <div class="relative">
-                                            ${getImpactBadge(commit.technical_impact)}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-sm font-medium text-gray-900">
-                                            <button class="hover:underline focus:outline-none" onclick="toggleCommitDetails('${commit.hash}')">
-                                                ${commit.title || commit.message}
-                                            </button>
-                                        </h3>
-                                        <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-500">
-                                            <span class="font-medium">${commit.repository}</span>
-                                            <span>&bull;</span>
-                                            <time datetime="${commit.date}">${formatFullDate(commit.date)}</time>
-                                            <span>&bull;</span>
-                                            <span>${commit.author}</span>
-                                            <span>&bull;</span>
-                                            <span>${formatRelativeTime(commit.date)}</span>
-                                            <span>&bull;</span>
-                                            <a href="${getGitHubUrl(commit.repository, 'commit', commit.hash)}" 
-                                               target="_blank"
-                                               class="px-1.5 py-0.5 text-xs font-mono bg-gray-100 rounded hover:bg-gray-200">
-                                                ${commit.hash.substring(0, 7)}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-2 text-sm text-gray-500">
-                                    <span>${commit.file_changes.length} files</span>
+                    <div class="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-baseline space-x-2">
+                                    <p class="text-sm font-medium text-gray-600">${commit.repository}</p>
+                                    <p class="text-sm text-gray-400">&bull;</p>
+                                    <a href="${getGitHubUrl(commit.repository, 'commit', commit.hash)}" target="_blank" class="text-sm font-mono text-blue-600 hover:text-blue-800">
+                                        ${commit.hash.substring(0, 7)}
+                                    </a>
                                 </div>
                             </div>
-                            <div class="mt-4 commit-details ${expandedCommits.has(commit.hash) ? '' : 'hidden'}" id="details-${commit.hash}">
-                                ${commit.detailed_description ? `
-                                    <div class="bg-gray-50 rounded-lg px-4 py-3 mt-3">
-                                        <p class="text-sm text-gray-700">${commit.detailed_description}</p>
-                                    </div>
-                                ` : ''}
-                                ${fileChanges}
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center space-x-2">
+                                    <time datetime="${commit.date}" class="text-sm text-gray-500">${formatFullDate(commit.date)}</time>
+                                    <span class="text-sm text-gray-400">&bull;</span>
+                                    <span class="text-sm text-gray-500">${formatRelativeTime(commit.date)}</span>
+                                </div>
+                                ${commit.technical_impact ? getImpactBadge(commit.technical_impact) : ''}
                             </div>
                         </div>
-                    </li>
+                        <div class="mt-2">
+                            <h3 class="text-sm font-medium text-gray-900 cursor-pointer" onclick="toggleCommitDetails('${commit.hash}')">${commit.title || commit.message}</h3>
+                            <p class="text-sm text-gray-500 mt-1">${commit.author}</p>
+                            ${commit.detailed_description ? `<p class="mt-2 text-sm text-gray-600">${commit.detailed_description}</p>` : ''}
+                        </div>
+                        ${isExpanded ? `
+                            <div class="mt-4 border-t border-gray-200 pt-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-sm font-medium text-gray-900">Changed Files</h4>
+                                    <span class="text-sm text-gray-500">${commit.file_changes.length} files</span>
+                                </div>
+                                ${fileChanges}
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
             }).join('');
 
             document.getElementById('commitsList').innerHTML = `
-                <ul role="list" class="divide-y divide-gray-200">
+                <div class="divide-y divide-gray-200">
                     ${html}
-                </ul>
+                </div>
             `;
         }
 
         function toggleCommitDetails(hash) {
-            const details = document.getElementById(`details-${hash}`);
-            if (details) {
-                details.classList.toggle('hidden');
+            if (expandedCommits.has(hash)) {
+                expandedCommits.delete(hash);
+            } else {
+                expandedCommits.add(hash);
             }
+            renderCommitsList(commitsData);
         }
 
         // Load and render data
         async function loadData() {
             try {
-                const response = await fetch('commits_data.json?v=' + new Date().getTime());
-                const data = await response.json();
-                renderRepoSummary(data);
-                renderCommitsList(data);
+                const response = await fetch('commits_data.json');
+                commitsData = await response.json();
+                renderRepoSummary(commitsData);
+                renderCommitsList(commitsData);
             } catch (error) {
                 console.error('Error loading data:', error);
             }
