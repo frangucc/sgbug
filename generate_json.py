@@ -3,20 +3,17 @@ import json
 
 def get_repo_summary(cursor):
     cursor.execute('''
-        SELECT 
-            r.name,
-            COUNT(DISTINCT c.id) as commits,
-            COUNT(DISTINCT cf.file_id) as files
+        SELECT r.name, COUNT(DISTINCT c.id) as commits, COUNT(DISTINCT f.id) as files
         FROM repositories r
         LEFT JOIN commits c ON c.repository_id = r.id
         LEFT JOIN commit_files cf ON cf.commit_id = c.id
-        GROUP BY r.id
-        ORDER BY commits DESC
+        LEFT JOIN files f ON f.id = cf.file_id
+        GROUP BY r.name
     ''')
     return [{"name": row[0], "commits": row[1], "files": row[2]} for row in cursor.fetchall()]
 
 def get_commit_details(cursor):
-    # First get the basic commit info
+    # First get all commits
     cursor.execute('''
         SELECT 
             r.name as repository,
@@ -24,7 +21,7 @@ def get_commit_details(cursor):
             c.author,
             c.commit_date,
             c.message,
-            GROUP_CONCAT(f.path, '||') as files,
+            GROUP_CONCAT(DISTINCT f.path) as files,
             cd.title,
             cd.detailed_description,
             cd.technical_impact
@@ -39,141 +36,135 @@ def get_commit_details(cursor):
     
     commits = []
     for row in cursor.fetchall():
-        commit = {
+        files = list(set(row[5].split(',') if row[5] else []))
+        commit_hash = row[1]
+        
+        # Get file changes for this commit
+        cursor.execute('''
+            SELECT file_path, change_summary, tags, impact_areas
+            FROM file_changes
+            WHERE commit_hash = ?
+        ''', (commit_hash,))
+        
+        file_changes = []
+        for fc in cursor.fetchall():
+            try:
+                tags = json.loads(fc[2] or '[]')
+                impact_areas = json.loads(fc[3] or '[]')
+            except:
+                tags = []
+                impact_areas = []
+                
+            file_changes.append({
+                'file_path': fc[0],
+                'change_summary': fc[1] or '',
+                'tags': tags,
+                'impact_areas': impact_areas
+            })
+            
+        commits.append({
             "repository": row[0],
             "hash": row[1],
             "author": row[2],
-            "date": row[3] if row[3] else None,
+            "date": row[3],
             "message": row[4],
-            "files": row[5].split('||') if row[5] else [],
-            "title": row[6] or row[4],  # Use message as title if title is null
-            "detailed_description": row[7] or row[4],  # Use message if no description
-            "technical_impact": row[8] or 'MINOR'
-        }
-        commits.append(commit)
-    
-    # Now get file changes for each commit
+            "files": files,
+            "title": row[6] or row[4],  # Use message as fallback
+            "detailed_description": row[7] or row[4],  # Use message as fallback
+            "technical_impact": row[8] or 'MINOR',
+            "file_changes": file_changes
+        })
+    return commits
+
+def get_file_timeline(cursor):
     cursor.execute('''
+        WITH CommitFiles AS (
+            SELECT 
+                c.id as commit_id,
+                COUNT(DISTINCT f.id) as file_count,
+                GROUP_CONCAT(f.path) as paths
+            FROM commits c
+            JOIN commit_files cf ON cf.commit_id = c.id
+            JOIN files f ON f.id = cf.file_id
+            GROUP BY c.id
+        )
         SELECT 
-            fc.commit_hash,
-            fc.file_path,
-            fc.change_summary,
+            c.hash,
+            c.commit_date,
+            c.message,
+            c.author,
+            cd.title,
+            cd.detailed_description,
+            cd.technical_impact,
+            r.name as repository,
+            cf.paths,
+            cf.file_count,
             fc.tags,
             fc.impact_areas,
-            NULL as function_changes
-        FROM file_changes fc
+            fc.change_summary
+        FROM commits c
+        JOIN repositories r ON r.id = c.repository_id
+        LEFT JOIN commit_details cd ON cd.commit_hash = c.hash
+        LEFT JOIN file_changes fc ON fc.commit_hash = c.hash
+        JOIN CommitFiles cf ON cf.commit_id = c.id
+        ORDER BY c.commit_date DESC
     ''')
     
-    changes_by_commit = {}
+    timeline = []
     for row in cursor.fetchall():
-        commit_hash = row[0]
-        if commit_hash not in changes_by_commit:
-            changes_by_commit[commit_hash] = []
-            
-        change = {
-            'file_path': row[1],
-            'change_summary': row[2],
-            'tags': json.loads(row[3] or '[]'),
-            'impact_areas': json.loads(row[4] or '[]'),
-            'function_changes': []
-        }
-        
-        if row[5]:  # Process function changes
-            for fc in row[5].split(','):
-                if not fc: continue
-                try:
-                    parts = fc.split('::')
-                    if len(parts) >= 2:
-                        fname, ftype = parts[0], parts[1]
-                        fdesc = parts[2] if len(parts) > 2 else ''
-                        if fname and ftype:
-                            change['function_changes'].append({
-                                'name': fname,
-                                'type': ftype,
-                                'description': fdesc
-                            })
-                except Exception as e:
-                    print(f'Error processing function change: {fc} - {e}')
-        
-        changes_by_commit[commit_hash].append(change)
-    
-    # Add file changes to commits
-    for commit in commits:
-        commit['file_changes'] = changes_by_commit.get(commit['hash'], [])
-    
-    return commits
-    
-    commits = []
-    for row in cursor.fetchall():
-        commit = dict(row)
-        
-        # Parse files list
-        if commit['files']:
-            commit['files'] = [f for f in commit['files'].split(',') if f]
-        else:
-            commit['files'] = []
-            
-        # Parse file changes
         try:
-            changes = json.loads(commit['file_changes'])
-            commit['file_changes'] = []
+            tags = json.loads(row[11] or '[]')
+            impact_areas = json.loads(row[12] or '[]')
+        except:
+            tags = []
+            impact_areas = []
             
-            for change in changes:
-                if not change['file_path']:
-                    continue
-                    
-                processed_change = {
-                    'file_path': change['file_path'],
-                    'change_summary': change['change_summary'] or '',
-                    'tags': json.loads(change['tags'] or '[]'),
-                    'impact_areas': json.loads(change['impact_areas'] or '[]'),
-                    'function_changes': []
-                }
-                
-                if change['function_changes']:
-                    for fc in change['function_changes'].split(','):
-                        if not fc:
-                            continue
-                        fname, ftype, fdesc = fc.split('::', 2)
-                        if fname and ftype:
-                            processed_change['function_changes'].append({
-                                'name': fname,
-                                'type': ftype,
-                                'description': fdesc
-                            })
-                
-                commit['file_changes'].append(processed_change)
-        except Exception as e:
-            print(f'Error processing file changes for commit {commit["hash"]}: {e}')
-            commit['file_changes'] = []
-        
-        # Set defaults for missing values
-        commit['title'] = commit.get('title') or commit['message']
-        commit['technical_impact'] = commit.get('technical_impact', 'MINOR')
-        commit['detailed_description'] = commit.get('detailed_description') or commit['message']
-        
-        commits.append(commit)
-    
-    return commits
+        paths = row[8].split('||') if row[8] else []
+        timeline.append({
+            "hash": row[0],
+            "date": row[1],
+            "message": row[2],
+            "author": row[3],
+            "title": row[4] or row[2],  # Use message as title if title is null
+            "description": row[5] or "No detailed description available.",
+            "impact": row[6] or "MINOR",
+            "repository": row[7],
+            "files": paths,
+            "file_count": row[9],
+            "tags": tags,
+            "impact_areas": impact_areas,
+            "change_summary": row[12] or ''
+        })
+    return timeline
+
+def get_file_changes(cursor):
+    cursor.execute('''
+        SELECT commit_hash, file_path, change_summary, tags, impact_areas
+        FROM file_changes
+    ''')
+    return [{
+        'commit_hash': row[0],
+        'file_path': row[1],
+        'change_summary': row[2],
+        'tags': row[3],
+        'impact_areas': row[4]
+    } for row in cursor.fetchall()]
 
 def main():
     conn = sqlite3.connect('commits_2025.db')
-    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-
-    # Get data
-    repo_summary = get_repo_summary(cursor)
-    commits = get_commit_details(cursor)
-
-    # Create the final data structure
+    
     data = {
-        'repoSummary': repo_summary,
-        'commits': commits
+        "repoSummary": get_repo_summary(cursor),
+        "commits": get_commit_details(cursor),
+        "fileTimeline": get_file_timeline(cursor),
+        "fileChanges": get_file_changes(cursor)
     }
-
-    # Write to file
+    
     with open('commits_data.json', 'w') as f:
         json.dump(data, f, indent=2)
+    
+    conn.close()
 
 if __name__ == '__main__':
     main()

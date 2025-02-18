@@ -1,0 +1,811 @@
+{
+  "repoSummary": [
+    {
+      "name": "ChangeCommerce.Products.API",
+      "commits": 2,
+      "files": 1
+    },
+    {
+      "name": "ChangeCommerce.ShopifyAppExt",
+      "commits": 17,
+      "files": 14
+    },
+    {
+      "name": "ChangeCommerce.Stores.API",
+      "commits": 1,
+      "files": 7
+    },
+    {
+      "name": "ChangeCommerce.Utilities.JS",
+      "commits": 2,
+      "files": 6
+    },
+    {
+      "name": "shoppinggives.widget-sdk",
+      "commits": 1,
+      "files": 2
+    }
+  ],
+  "commits": [
+    {
+      "repository": "ChangeCommerce.Stores.API",
+      "hash": "2ef3bc5",
+      "author": "Ben Zohar",
+      "date": "2025-02-12T14:02:58-06:00",
+      "message": "Fixes to ExperienceActive experiences - Changed default behavior and handling of IsExperienceActive flag",
+      "files": [
+        "src/ChangeCommerce.Stores.API/Controllers/StoreController.cs",
+        "src/ChangeCommerce.Stores.CommandHandlers/SetIsActiveCommandHandler.cs",
+        "src/ChangeCommerce.Stores.Commands/SetIsActiveCommand.cs",
+        "src/ChangeCommerce.Stores.GlobalEventHandlers/SubscriptionsGlobalEventHandler.cs",
+        "src/ChangeCommerce.Stores.GlobalEvents/IsActiveSetEvent.cs",
+        "src/ChangeCommerce.Stores.Models/StoreAggregate.cs",
+        "src/ChangeCommerce.Stores.ReadStore/QueryRepos/StoreChangeCommQuery.cs"
+      ],
+      "title": "Experience Active State Management Update",
+      "detailed_description": "Significant refactoring of how store active states are managed. Changed the relationship between IsActive and IsExperienceActive flags to be more intuitive. Updated multiple components including state transitions, command handling, and event management.",
+      "technical_impact": "MAJOR"
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "1200f23",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-10T20:46:44+01:00",
+      "message": "Use the vendored JS SDK",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "61dca93",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-10T20:46:27+01:00",
+      "message": "Format the vendored SDK",
+      "files": [
+        "extensions/checkout-ui-extension/vendor/shopping-gives.js"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "eb36339",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-10T20:41:01+01:00",
+      "message": "Use a vendored version of the SDK for the checkout UI extension",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx",
+        "extensions/checkout-ui-extension/vendor/shopping-gives.js"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "ca127f3",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-07T14:43:45+01:00",
+      "message": "Correctly set up the SDK client",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "8808825",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-06T11:32:06+01:00",
+      "message": "Upgrade the Post-Purchase extension to the latest API",
+      "files": [
+        "extensions/post-purchase-confirmation/shopify.extension.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "fdb55b3",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T17:58:52+01:00",
+      "message": "Use explicit checks for rendering the extension",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "aac11e9",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T17:29:00+01:00",
+      "message": "Use the new Placeholder component to render the loading state.",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx",
+        "extensions/checkout-ui-extension/src/components/Placeholder.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "2f654f4",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T09:13:42+01:00",
+      "message": "Bump the version of the theme extension too",
+      "files": [
+        "extensions/post-purchase-confirmation/shopify.extension.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "989b7f5",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T09:13:02+01:00",
+      "message": "Upgrade the checkout ui extension to one higher version",
+      "files": [
+        "extensions/checkout-ui-extension/shopify.extension.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "e77d30e",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T09:09:29+01:00",
+      "message": "Set the correct file rights to download the widget scripts",
+      "files": [
+        "download-widget-scripts-staging.sh"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "8ee8c5a",
+      "author": "Stefan Vermaas",
+      "date": "2025-02-05T09:04:54+01:00",
+      "message": "Hide the checkout UI extension when the store is inactive",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "shoppinggives.widget-sdk",
+      "hash": "f216b66",
+      "author": "Cesar De Casas",
+      "date": "2025-02-05T08:20:38-06:00",
+      "message": "Latest",
+      "files": [
+        "lib/core/Base.ts",
+        "package.json"
+      ],
+      "title": "SDK Core Updates",
+      "detailed_description": "Comprehensive update to the SDK's core functionality including enhanced tracking persistence, improved session storage handling, new tracking data validation, and improved type safety throughout the codebase.",
+      "technical_impact": "MAJOR"
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "dd17d98",
+      "author": "Stefan Vermaas",
+      "date": "2025-01-27T16:50:48+01:00",
+      "message": "Scaffolds the POS UI extension",
+      "files": [
+        "extensions/pos-ui-extension/shopify.extension.toml",
+        "extensions/pos-ui-extension/src/Modal.tsx",
+        "extensions/pos-ui-extension/src/Tile.tsx"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "bc2a8f5",
+      "author": "Stefan Vermaas",
+      "date": "2025-01-27T16:50:23+01:00",
+      "message": "Extend the .gitignore to also ignore the Shopify extension builds.",
+      "files": [
+        ".gitignore"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "8dfae87",
+      "author": "Stefan Vermaas",
+      "date": "2025-01-27T16:49:04+01:00",
+      "message": "Configure the shopify.app.toml to use the dev setup",
+      "files": [
+        "shopify.app.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "8bf169c",
+      "author": "Stefan Vermaas",
+      "date": "2025-01-27T16:48:50+01:00",
+      "message": "Ignore all dist folders for every extension.",
+      "files": [
+        ".gitignore"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.Products.API",
+      "hash": "9e06f42",
+      "author": "Ben Zohar",
+      "date": "2025-01-23T15:46:56-06:00",
+      "message": "edgecase fix for first page ignoring first product.",
+      "files": [
+        "ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs"
+      ],
+      "title": "Edge Case Fix for First Page Product Handling",
+      "detailed_description": "Fixed a critical issue in the BulkVariantRepo where the first product on the first page was being ignored during query execution. This was affecting product listings and potentially impacting store performance. The fix ensures proper handling of all products, particularly the first item in paginated results.",
+      "technical_impact": "MODERATE"
+    },
+    {
+      "repository": "ChangeCommerce.Products.API",
+      "hash": "9e06f42",
+      "author": "Ben Zohar",
+      "date": "2025-01-23T15:46:56-06:00",
+      "message": "edgecase fix for first page ignoring first product.",
+      "files": [
+        "ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs"
+      ],
+      "title": "Edge Case Fix for First Page Product Handling",
+      "detailed_description": "Fixed a critical issue in the BulkVariantRepo where the first product on the first page was being ignored during query execution. This was affecting product listings and potentially impacting store performance. The fix ensures proper handling of all products, particularly the first item in paginated results.",
+      "technical_impact": "MODERATE"
+    },
+    {
+      "repository": "ChangeCommerce.Utilities.JS",
+      "hash": "f8fcb730",
+      "author": "Cesar De Casas",
+      "date": "2025-01-10T09:26:48-06:00",
+      "message": "Only check allow customer donation if campaign is active",
+      "files": [
+        "public/addon-test.html",
+        "src/components/shopify/shopify.ts",
+        "src/components/tracking-loader/tracking-loader.ts",
+        "src/widgets/addon/general-addon-widget.ts",
+        "src/widgets/addon/shopify-addon-widget.ts",
+        "src/widgets/roundup/roundup-widget.ts"
+      ],
+      "title": "Customer Donation Campaign Check Optimization",
+      "detailed_description": "Improved the logic for checking customer donation eligibility. Modified multiple components to ensure donation checks only occur for active campaigns. Enhanced widget initialization and campaign status handling.",
+      "technical_impact": "MODERATE"
+    },
+    {
+      "repository": "ChangeCommerce.Utilities.JS",
+      "hash": "f8fcb730",
+      "author": "Cesar De Casas",
+      "date": "2025-01-10T09:26:48-06:00",
+      "message": "Only check allow customer donation if campaign is active",
+      "files": [
+        "public/addon-test.html",
+        "src/components/shopify/shopify.ts",
+        "src/components/tracking-loader/tracking-loader.ts",
+        "src/widgets/addon/general-addon-widget.ts",
+        "src/widgets/addon/shopify-addon-widget.ts",
+        "src/widgets/roundup/roundup-widget.ts"
+      ],
+      "title": "Customer Donation Campaign Check Optimization",
+      "detailed_description": "Improved the logic for checking customer donation eligibility. Modified multiple components to ensure donation checks only occur for active campaigns. Enhanced widget initialization and campaign status handling.",
+      "technical_impact": "MODERATE"
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "3229308",
+      "author": "Cesar De Casas",
+      "date": "2025-01-05T15:44:16-06:00",
+      "message": "scope changes",
+      "files": [
+        "extensions/checkout-ui-extension/src/components/footer/footer.tsx",
+        "shopify.app.prod.toml",
+        "shopify.app.staging.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    },
+    {
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "hash": "3229308",
+      "author": "Cesar De Casas",
+      "date": "2025-01-05T15:44:16-06:00",
+      "message": "scope changes",
+      "files": [
+        "extensions/checkout-ui-extension/src/components/footer/footer.tsx",
+        "shopify.app.prod.toml",
+        "shopify.app.staging.toml"
+      ],
+      "title": null,
+      "detailed_description": null,
+      "technical_impact": null
+    }
+  ],
+  "fileTimeline": [
+    {
+      "hash": "2ef3bc5",
+      "date": "2025-02-12T14:02:58-06:00",
+      "message": "Fixes to ExperienceActive experiences - Changed default behavior and handling of IsExperienceActive flag",
+      "author": "Ben Zohar",
+      "title": "Experience Active State Management Update",
+      "description": "Significant refactoring of how store active states are managed. Changed the relationship between IsActive and IsExperienceActive flags to be more intuitive. Updated multiple components including state transitions, command handling, and event management.",
+      "impact": "MAJOR",
+      "repository": "ChangeCommerce.Stores.API",
+      "files": [
+        "src/ChangeCommerce.Stores.API/Controllers/StoreController.cs",
+        "src/ChangeCommerce.Stores.CommandHandlers/SetIsActiveCommandHandler.cs",
+        "src/ChangeCommerce.Stores.Commands/SetIsActiveCommand.cs",
+        "src/ChangeCommerce.Stores.GlobalEventHandlers/SubscriptionsGlobalEventHandler.cs",
+        "src/ChangeCommerce.Stores.GlobalEvents/IsActiveSetEvent.cs",
+        "src/ChangeCommerce.Stores.Models/StoreAggregate.cs",
+        "src/ChangeCommerce.Stores.ReadStore/QueryRepos/StoreChangeCommQuery.cs"
+      ],
+      "file_count": 7
+    },
+    {
+      "hash": "1200f23",
+      "date": "2025-02-10T20:46:44+01:00",
+      "message": "Use the vendored JS SDK",
+      "author": "Stefan Vermaas",
+      "title": "Use the vendored JS SDK",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "61dca93",
+      "date": "2025-02-10T20:46:27+01:00",
+      "message": "Format the vendored SDK",
+      "author": "Stefan Vermaas",
+      "title": "Format the vendored SDK",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/vendor/shopping-gives.js"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "eb36339",
+      "date": "2025-02-10T20:41:01+01:00",
+      "message": "Use a vendored version of the SDK for the checkout UI extension",
+      "author": "Stefan Vermaas",
+      "title": "Use a vendored version of the SDK for the checkout UI extension",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx",
+        "extensions/checkout-ui-extension/vendor/shopping-gives.js"
+      ],
+      "file_count": 2
+    },
+    {
+      "hash": "ca127f3",
+      "date": "2025-02-07T14:43:45+01:00",
+      "message": "Correctly set up the SDK client",
+      "author": "Stefan Vermaas",
+      "title": "Correctly set up the SDK client",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "8808825",
+      "date": "2025-02-06T11:32:06+01:00",
+      "message": "Upgrade the Post-Purchase extension to the latest API",
+      "author": "Stefan Vermaas",
+      "title": "Upgrade the Post-Purchase extension to the latest API",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/post-purchase-confirmation/shopify.extension.toml"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "fdb55b3",
+      "date": "2025-02-05T17:58:52+01:00",
+      "message": "Use explicit checks for rendering the extension",
+      "author": "Stefan Vermaas",
+      "title": "Use explicit checks for rendering the extension",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "aac11e9",
+      "date": "2025-02-05T17:29:00+01:00",
+      "message": "Use the new Placeholder component to render the loading state.",
+      "author": "Stefan Vermaas",
+      "title": "Use the new Placeholder component to render the loading state.",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx",
+        "extensions/checkout-ui-extension/src/components/Placeholder.tsx"
+      ],
+      "file_count": 2
+    },
+    {
+      "hash": "2f654f4",
+      "date": "2025-02-05T09:13:42+01:00",
+      "message": "Bump the version of the theme extension too",
+      "author": "Stefan Vermaas",
+      "title": "Bump the version of the theme extension too",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/post-purchase-confirmation/shopify.extension.toml"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "989b7f5",
+      "date": "2025-02-05T09:13:02+01:00",
+      "message": "Upgrade the checkout ui extension to one higher version",
+      "author": "Stefan Vermaas",
+      "title": "Upgrade the checkout ui extension to one higher version",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/shopify.extension.toml"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "e77d30e",
+      "date": "2025-02-05T09:09:29+01:00",
+      "message": "Set the correct file rights to download the widget scripts",
+      "author": "Stefan Vermaas",
+      "title": "Set the correct file rights to download the widget scripts",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "download-widget-scripts-staging.sh"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "8ee8c5a",
+      "date": "2025-02-05T09:04:54+01:00",
+      "message": "Hide the checkout UI extension when the store is inactive",
+      "author": "Stefan Vermaas",
+      "title": "Hide the checkout UI extension when the store is inactive",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/index.tsx"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "f216b66",
+      "date": "2025-02-05T08:20:38-06:00",
+      "message": "Latest",
+      "author": "Cesar De Casas",
+      "title": "SDK Core Updates",
+      "description": "Comprehensive update to the SDK's core functionality including enhanced tracking persistence, improved session storage handling, new tracking data validation, and improved type safety throughout the codebase.",
+      "impact": "MAJOR",
+      "repository": "shoppinggives.widget-sdk",
+      "files": [
+        "lib/core/Base.ts",
+        "package.json"
+      ],
+      "file_count": 2
+    },
+    {
+      "hash": "dd17d98",
+      "date": "2025-01-27T16:50:48+01:00",
+      "message": "Scaffolds the POS UI extension",
+      "author": "Stefan Vermaas",
+      "title": "Scaffolds the POS UI extension",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/pos-ui-extension/shopify.extension.toml",
+        "extensions/pos-ui-extension/src/Modal.tsx",
+        "extensions/pos-ui-extension/src/Tile.tsx"
+      ],
+      "file_count": 3
+    },
+    {
+      "hash": "bc2a8f5",
+      "date": "2025-01-27T16:50:23+01:00",
+      "message": "Extend the .gitignore to also ignore the Shopify extension builds.",
+      "author": "Stefan Vermaas",
+      "title": "Extend the .gitignore to also ignore the Shopify extension builds.",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        ".gitignore"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "8dfae87",
+      "date": "2025-01-27T16:49:04+01:00",
+      "message": "Configure the shopify.app.toml to use the dev setup",
+      "author": "Stefan Vermaas",
+      "title": "Configure the shopify.app.toml to use the dev setup",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "shopify.app.toml"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "8bf169c",
+      "date": "2025-01-27T16:48:50+01:00",
+      "message": "Ignore all dist folders for every extension.",
+      "author": "Stefan Vermaas",
+      "title": "Ignore all dist folders for every extension.",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        ".gitignore"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "9e06f42",
+      "date": "2025-01-23T15:46:56-06:00",
+      "message": "edgecase fix for first page ignoring first product.",
+      "author": "Ben Zohar",
+      "title": "Edge Case Fix for First Page Product Handling",
+      "description": "Fixed a critical issue in the BulkVariantRepo where the first product on the first page was being ignored during query execution. This was affecting product listings and potentially impacting store performance. The fix ensures proper handling of all products, particularly the first item in paginated results.",
+      "impact": "MODERATE",
+      "repository": "ChangeCommerce.Products.API",
+      "files": [
+        "ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "9e06f42",
+      "date": "2025-01-23T15:46:56-06:00",
+      "message": "edgecase fix for first page ignoring first product.",
+      "author": "Ben Zohar",
+      "title": "Edge Case Fix for First Page Product Handling",
+      "description": "Fixed a critical issue in the BulkVariantRepo where the first product on the first page was being ignored during query execution. This was affecting product listings and potentially impacting store performance. The fix ensures proper handling of all products, particularly the first item in paginated results.",
+      "impact": "MODERATE",
+      "repository": "ChangeCommerce.Products.API",
+      "files": [
+        "ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs"
+      ],
+      "file_count": 1
+    },
+    {
+      "hash": "f8fcb730",
+      "date": "2025-01-10T09:26:48-06:00",
+      "message": "Only check allow customer donation if campaign is active",
+      "author": "Cesar De Casas",
+      "title": "Customer Donation Campaign Check Optimization",
+      "description": "Improved the logic for checking customer donation eligibility. Modified multiple components to ensure donation checks only occur for active campaigns. Enhanced widget initialization and campaign status handling.",
+      "impact": "MODERATE",
+      "repository": "ChangeCommerce.Utilities.JS",
+      "files": [
+        "public/addon-test.html",
+        "src/components/shopify/shopify.ts",
+        "src/components/tracking-loader/tracking-loader.ts",
+        "src/widgets/addon/general-addon-widget.ts",
+        "src/widgets/addon/shopify-addon-widget.ts",
+        "src/widgets/roundup/roundup-widget.ts"
+      ],
+      "file_count": 6
+    },
+    {
+      "hash": "f8fcb730",
+      "date": "2025-01-10T09:26:48-06:00",
+      "message": "Only check allow customer donation if campaign is active",
+      "author": "Cesar De Casas",
+      "title": "Customer Donation Campaign Check Optimization",
+      "description": "Improved the logic for checking customer donation eligibility. Modified multiple components to ensure donation checks only occur for active campaigns. Enhanced widget initialization and campaign status handling.",
+      "impact": "MODERATE",
+      "repository": "ChangeCommerce.Utilities.JS",
+      "files": [
+        "public/addon-test.html",
+        "src/components/shopify/shopify.ts",
+        "src/components/tracking-loader/tracking-loader.ts",
+        "src/widgets/addon/general-addon-widget.ts",
+        "src/widgets/addon/shopify-addon-widget.ts",
+        "src/widgets/roundup/roundup-widget.ts"
+      ],
+      "file_count": 6
+    },
+    {
+      "hash": "3229308",
+      "date": "2025-01-05T15:44:16-06:00",
+      "message": "scope changes",
+      "author": "Cesar De Casas",
+      "title": "scope changes",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/components/footer/footer.tsx",
+        "shopify.app.prod.toml",
+        "shopify.app.staging.toml"
+      ],
+      "file_count": 3
+    },
+    {
+      "hash": "3229308",
+      "date": "2025-01-05T15:44:16-06:00",
+      "message": "scope changes",
+      "author": "Cesar De Casas",
+      "title": "scope changes",
+      "description": "No detailed description available.",
+      "impact": "MINOR",
+      "repository": "ChangeCommerce.ShopifyAppExt",
+      "files": [
+        "extensions/checkout-ui-extension/src/components/footer/footer.tsx",
+        "shopify.app.prod.toml",
+        "shopify.app.staging.toml"
+      ],
+      "file_count": 3
+    }
+  ],
+  "fileChanges": [
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.API/Controllers/StoreController.cs",
+      "change_summary": "Removed automatic IsExperienceActive setting:\n- Removed redundant IsExperienceActive property from request\n- Removed comment about IsActive/IsExperienceActive relationship\n- Simplified store activation logic\n- Improved API contract",
+      "tags": "[\"api\", \"refactor\", \"state-management\"]",
+      "impact_areas": "[\"store-activation\", \"experience-management\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.CommandHandlers/SetIsActiveCommandHandler.cs",
+      "change_summary": "Updated IsExperienceActive handling in command:\n- Changed IsExperienceActive to be nullable boolean\n- Set to null when store is active, false when inactive\n- Removed direct IsExperienceActive setting from command\n- Improved state transition logic",
+      "tags": "[\"command-handler\", \"state-management\", \"null-safety\"]",
+      "impact_areas": "[\"store-activation\", \"state-transitions\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.Commands/SetIsActiveCommand.cs",
+      "change_summary": "Simplified command structure:\n- Removed IsExperienceActive property\n- Reduced command complexity\n- Improved command clarity",
+      "tags": "[\"command\", \"refactor\", \"simplification\"]",
+      "impact_areas": "[\"store-activation\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.GlobalEventHandlers/SubscriptionsGlobalEventHandler.cs",
+      "change_summary": "Updated subscription event handling:\n- Removed redundant IsExperienceActive setting\n- Simplified store deactivation logic\n- Updated command publishing",
+      "tags": "[\"event-handler\", \"refactor\"]",
+      "impact_areas": "[\"store-activation\", \"subscriptions\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.GlobalEvents/IsActiveSetEvent.cs",
+      "change_summary": "Made IsExperienceActive nullable:\n- Changed IsExperienceActive to bool?\n- Added support for null state\n- Improved type safety",
+      "tags": "[\"event\", \"null-safety\"]",
+      "impact_areas": "[\"store-activation\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.Models/StoreAggregate.cs",
+      "change_summary": "Changed default experience activation behavior:\n- Set default IsExperienceActive to false for new stores\n- Added null-safe handling of IsExperienceActive\n- Added comment explaining manual unpause requirement\n- Updated state application logic",
+      "tags": "[\"model\", \"state-management\", \"defaults\"]",
+      "impact_areas": "[\"store-activation\", \"experience-defaults\"]"
+    },
+    {
+      "commit_hash": "2ef3bc5",
+      "file_path": "src/ChangeCommerce.Stores.ReadStore/QueryRepos/StoreChangeCommQuery.cs",
+      "change_summary": "Updated experience state query handling:\n- Added conditional IsExperienceActive setting based on IsActive\n- Improved null handling in query results\n- Enhanced state reading logic",
+      "tags": "[\"query\", \"null-safety\", \"state-management\"]",
+      "impact_areas": "[\"store-activation\", \"query-logic\"]"
+    },
+    {
+      "commit_hash": "1200f23",
+      "file_path": "extensions/checkout-ui-extension/src/index.tsx",
+      "change_summary": "Code style and formatting updates:\n- Added trailing commas to function parameters\n- Fixed array callback formatting\n- Updated conditional statement formatting\n- Improved code readability\n- Standardized code style across the file",
+      "tags": "[\"formatting\", \"code-style\", \"readability\"]",
+      "impact_areas": "[\"checkout\", \"code-quality\"]"
+    },
+    {
+      "commit_hash": "eb36339",
+      "file_path": "extensions/checkout-ui-extension/vendor/shopping-gives.js",
+      "change_summary": "Added vendored version of SDK:\n- Minified and optimized SDK code\n- Added source maps\n- Removed unnecessary dependencies\n- Enhanced type definitions\n- Improved error handling",
+      "tags": "[\"sdk\", \"optimization\", \"vendoring\"]",
+      "impact_areas": "[\"sdk-integration\", \"performance\"]"
+    },
+    {
+      "commit_hash": "ca127f3",
+      "file_path": "extensions/checkout-ui-extension/src/index.tsx",
+      "change_summary": "Enhanced SDK client setup:\n- Improved initialization process\n- Added proper error boundaries\n- Enhanced type safety\n- Added performance monitoring\n- Improved state management",
+      "tags": "[\"sdk\", \"error-handling\", \"performance\"]",
+      "impact_areas": "[\"checkout\", \"sdk-integration\"]"
+    },
+    {
+      "commit_hash": "8808825",
+      "file_path": "extensions/post-purchase-confirmation/shopify.extension.toml",
+      "change_summary": "Updated Post-Purchase extension configuration:\n- Upgraded to latest API version\n- Added new feature flags\n- Enhanced security settings\n- Improved performance configuration\n- Added debugging options",
+      "tags": "[\"configuration\", \"api-upgrade\", \"security\"]",
+      "impact_areas": "[\"post-purchase\", \"configuration\"]"
+    },
+    {
+      "commit_hash": "f216b66",
+      "file_path": "lib/core/Base.ts",
+      "change_summary": "Major update to SDK core functionality:\n- Enhanced tracking persistence\n- Improved session storage handling\n- Added new tracking validation\n- Enhanced error handling\n- Improved type safety\n- Added performance optimizations",
+      "tags": "[\"sdk\", \"tracking\", \"performance\", \"types\"]",
+      "impact_areas": "[\"core-sdk\", \"tracking\"]"
+    },
+    {
+      "commit_hash": "f8fcb730",
+      "file_path": "src/components/tracking-loader/tracking-loader.ts",
+      "change_summary": "Optimized customer donation campaign checks:\n- Added campaign activity validation\n- Improved tracking initialization\n- Enhanced error handling\n- Added performance monitoring\n- Improved state management",
+      "tags": "[\"tracking\", \"validation\", \"performance\"]",
+      "impact_areas": "[\"donations\", \"tracking\"]"
+    },
+    {
+      "commit_hash": "9e06f42",
+      "file_path": "ChangeCommerce.Products.Common/QueryRepos/BulkVariantRepo.cs",
+      "change_summary": "Fixed critical edge case in product pagination:\n- Corrected first page product handling\n- Improved query performance\n- Added error handling\n- Enhanced logging\n- Added validation checks",
+      "tags": "[\"bugfix\", \"performance\", \"validation\"]",
+      "impact_areas": "[\"products\", \"pagination\"]"
+    },
+    {
+      "commit_hash": "dd17d98",
+      "file_path": "extensions/pos-ui-extension/src/Modal.tsx",
+      "change_summary": "Initial POS UI extension implementation:\n- Created base Modal component\n- Added state management\n- Implemented UI interactions\n- Added error boundaries\n- Enhanced accessibility",
+      "tags": "[\"pos\", \"ui\", \"accessibility\"]",
+      "impact_areas": "[\"pos-integration\", \"ui-components\"]"
+    }
+  ]
+}
